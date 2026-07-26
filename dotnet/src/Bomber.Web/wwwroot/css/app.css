@@ -1,0 +1,94 @@
+:root {
+    color-scheme: dark;
+    font-family: Inter, "Segoe UI", "Microsoft JhengHei", system-ui, sans-serif;
+    font-synthesis: none;
+    --ink: #f4fbff;
+    --muted: #91a8bf;
+    --cyan: #42efff;
+    --violet: #9a63ff;
+    --coral: #ff5d72;
+    --gold: #ffd765;
+    background: #03050f;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #app { min-width: 320px; min-height: 100%; margin: 0; }
+
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    color: var(--ink);
+    background:
+        radial-gradient(circle at 18% 10%, rgba(48, 221, 255, .13), transparent 31rem),
+        radial-gradient(circle at 86% 84%, rgba(154, 72, 255, .15), transparent 34rem),
+        #03050f;
+}
+
+button, input, select { font: inherit; }
+button { border: 0; cursor: pointer; }
+button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focus-visible {
+    outline: 3px solid rgba(93, 239, 255, .75);
+    outline-offset: 3px;
+}
+
+.loading-mark {
+    position: absolute;
+    width: 6.2rem;
+    height: 6.2rem;
+    inset: calc(24vh + .9rem) 0 auto;
+    margin: auto;
+    border-radius: 1.7rem;
+    filter: drop-shadow(0 0 22px rgba(75, 222, 255, .38));
+}
+
+.loading-progress {
+    position: absolute;
+    display: block;
+    width: 9rem;
+    height: 9rem;
+    inset: 24vh 0 auto;
+    margin: auto;
+}
+
+.loading-progress circle {
+    fill: none;
+    stroke: rgba(255, 255, 255, .09);
+    stroke-width: .42rem;
+    transform-origin: 50% 50%;
+    transform: rotate(-90deg);
+}
+
+.loading-progress circle:last-child {
+    stroke: var(--cyan);
+    filter: drop-shadow(0 0 5px var(--cyan));
+    stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * .8), 500%;
+    transition: stroke-dasharray .05s ease-in-out;
+}
+
+.loading-progress-text {
+    position: absolute;
+    inset: calc(24vh + 10rem) 0 auto;
+    color: #a9c2d9;
+    text-align: center;
+    font-weight: 800;
+    letter-spacing: .12em;
+}
+
+.loading-progress-text::after { content: var(--blazor-load-percentage-text, "載入 .NET 競技場"); }
+
+#blazor-error-ui {
+    display: none;
+    position: fixed;
+    inset: auto 1rem 1rem;
+    z-index: 1000;
+    padding: .9rem 3rem .9rem 1rem;
+    color: #fff;
+    background: rgba(121, 21, 45, .96);
+    border: 1px solid #ff7f9b;
+    border-radius: .8rem;
+    box-shadow: 0 16px 50px #000;
+}
+
+#blazor-error-ui a { color: #fff; font-weight: 800; }
+#blazor-error-ui .dismiss { position: absolute; right: 1rem; cursor: pointer; }

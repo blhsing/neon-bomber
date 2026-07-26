@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>NeonBomber</AssemblyName>
+    <RootNamespace>NeonBomber.Launcher</RootNamespace>
+    <ApplicationIcon>..\..\..\html\assets\icons\favicon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+</Project>

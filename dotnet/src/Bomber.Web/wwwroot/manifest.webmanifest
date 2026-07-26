@@ -1,0 +1,13 @@
+{
+  "name": "霓虹爆彈王 · .NET Edition",
+  "short_name": "霓虹爆彈王",
+  "description": "Blazor WebAssembly 本機多人爆彈競技場",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#050714",
+  "theme_color": "#070a1c",
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

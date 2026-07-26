@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="color-scheme" content="dark">
+  <title>霓虹爆彈王：混沌競技場</title>
+  <meta name="theme-color" content="#050817">
+  <link rel="icon" href="assets/icons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/lobby.css">
+  <link rel="stylesheet" href="css/overlays.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<main id="app">
+  <canvas id="game" width="1280" height="720" tabindex="0" aria-label="爆彈競技場"></canvas>
+  <div id="topbar" class="hidden"><button id="pauseBtn" class="mini">暫停　<span class="kbd">Esc</span></button><div id="roundLabel">第 1 回合</div><button id="soundBtn" class="mini">音效：開</button></div>
+  <section id="menu" class="screen">
+    <div class="panel">
+      <h1>霓虹爆彈王</h1><div class="subtitle">混　沌　競　技　場</div>
+      <div id="slots" class="slots"></div>
+      <div class="options">
+        <label class="choice">勝利皇冠 <select id="wins"><option value="1">1 冠</option><option value="2">2 冠</option><option value="3" selected>3 冠</option><option value="5">5 冠</option></select></label>
+        <label class="choice">競技場 <select id="density"><option value=".46">寬闊</option><option value=".60" selected>標準</option><option value=".72">瘋狂</option></select></label>
+        <label class="choice">道具量 <select id="loot"><option value=".30">稀少</option><option value=".52" selected>豐富</option><option value=".76">暴雨</option></select></label>
+      </div>
+      <div class="actions"><button id="startBtn" class="primary">點燃競技場</button><button id="helpBtn" class="secondary">完整玩法</button></div>
+      <div id="warning" class="warning"></div>
+    </div>
+  </section>
+  <div id="help" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card"><h2>爆彈生存指南</h2>
+      <p>在迷宮中放置爆彈，炸開能量箱、收集強化晶片並讓其他參賽者退出戰局。火焰會沿十字方向延伸，被堅固牆擋住，並能引爆路上的其他爆彈。最後存活者取得一頂皇冠；先達設定皇冠數即稱霸競技場。</p>
+      <h3>三人共用鍵盤</h3><div id="controlHelp" class="help-grid"></div>
+      <p>每組按鍵位於鍵盤不同的水平區域，三雙手可同時操作。第四席可交給人工智慧。<span class="kbd">Esc</span> 暫停；任何人皆可在暫停畫面繼續。</p>
+      <h3>戰鬥技巧</h3><ul><li>放下爆彈前先確認逃生路線；角落很適合伏擊，也很容易把自己封死。</li><li>走近爆彈並朝它移動即可用「戰靴」踢出；爆彈撞到障礙才會停下。</li><li>取得「遙控器」後，技能鍵會優先引爆最早放置的爆彈；「拳套」則可把前方爆彈拋出去。</li><li>火焰能連鎖引爆，等對手剛放下爆彈再點燃連鎖，往往比正面追擊有效。</li><li>混沌禮盒可能帶來神力、瞬移或詛咒。「方向反轉」會讓上下左右輸入顛倒 6 秒；「黏液減速」會把移動速度降至約 62%，持續 6 秒。</li></ul>
+      <h3>幽靈復仇</h3><p>參賽者出局後會化為幽靈，在競技場最外圈的堅固牆上飄行。沿用自己的移動鍵繞行外圈；面向場內時按爆彈鍵，即可把幽靈爆彈拋向該方向上的隨機有效距離。每位幽靈同時只能擁有一枚爆彈，必須等它爆炸後才能再次投擲。若幽靈爆彈造成致命一擊，幽靈會在被淘汰者倒下的位置以一顆生命復活，並獲得短暫無敵；被淘汰者則成為新的幽靈。人工智慧幽靈也會追蹤目標並尋找命中機率較高的投彈角度。但若一次傷害結算後場內只剩一位活著的玩家，回合會先立即結束，造成擊殺的幽靈不會復活，也不能再反擊。</p>
+      <h3>強化晶片大全</h3><div id="powerHelp" class="help-grid"></div><p>戰局右側的每位玩家卡片底部會顯示目前正在生效的晶片圖像；永久裝備會持續亮起，充能耗盡、護盾破裂或暫時狀態結束後則會自動消失。</p>
+      <h3>人工智慧與難度</h3><p>每個電腦席位都能獨立選擇「新手、標準、高手、瘋狂」。等級越高，反應越快、預測時間越遠，也越擅長用破牆、封路、連鎖與遙控爆破困住對手。電腦只會蒐集場上已經出現的晶片，不會偷看能量箱裡尚未掉落的道具。即使是新手，放彈前也會先模擬一條可存活的逃生路；較低等級的差異主要在反應、戰術選擇與偶爾錯失良機。</p>
+      <h3>素材與授權</h3><p>隨附於本地的爆彈圖示，以及部分確認、拾取與勝利音效取自 <a href="https://kenney.nl/" target="_blank" rel="noreferrer">Kenney</a> 的「平臺遊戲美術豪華包」、「數位音效」與「音樂短曲」，依 Creative Commons Zero（CC0 1.0）釋出，特此致謝。角色、競技場、光影、粒子與其餘音樂音效由本遊戲程序化產生。所有實際素材均已隨遊戲一併封裝於本地，離線遊玩不會連線下載。</p>
+      <div class="close-row"><button id="closeHelp" class="primary">了解，準備爆破</button></div>
+    </div>
+  </div>
+  <div id="pause" class="modal hidden"><div class="modal-card pause-card"><h2>時空凍結</h2><p>競技場已暫停。調整手勢、深呼吸，然後繼續製造混沌。</p><div class="actions"><button id="resumeBtn" class="primary">繼續戰鬥</button><button id="restartBtn" class="secondary">重新開局</button><button id="quitBtn" class="secondary">返回大廳</button></div></div></div>
+  <div id="announcement" class="modal hidden"><div class="modal-card"><div id="announceTitle">回合結束</div><div id="announceText"></div><div class="actions"><button id="nextBtn" class="primary">下一回合</button><button id="lobbyBtn" class="secondary">返回大廳</button></div></div></div>
+</main>
+  <script defer src="js/core.js"></script>
+  <script defer src="js/audio.js"></script>
+  <script defer src="js/game.js"></script>
+  <script defer src="js/ai.js"></script>
+  <script defer src="js/simulation.js"></script>
+  <script defer src="js/render.js"></script>
+  <script defer src="js/app.js"></script>
+</body>
+</html>

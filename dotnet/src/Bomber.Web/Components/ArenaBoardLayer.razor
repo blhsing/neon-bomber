@@ -1,0 +1,54 @@
+@for (var y = 0; y < Board.Height; y++)
+{
+    @for (var x = 0; x < Board.Width; x++)
+    {
+        var tile = Board[x, y];
+        <rect class="@FloorClass(x, y)" x="@(x * CellSize)" y="@(y * CellSize)" width="@CellSize" height="@CellSize" />
+        @if (tile == TileType.SolidWall)
+        {
+            <g>
+                <rect class="solid-cell" x="@(x * CellSize + 2)" y="@(y * CellSize + 2)" width="@(CellSize - 4)" height="@(CellSize - 4)" rx="8" />
+                <rect class="wall-core" x="@(x * CellSize + 9)" y="@(y * CellSize + 9)" width="@(CellSize - 18)" height="@(CellSize - 18)" rx="5" />
+            </g>
+        }
+        else if (tile == TileType.Crate)
+        {
+            <g>
+                <rect class="crate-cell" x="@(x * CellSize + 4)" y="@(y * CellSize + 4)" width="@(CellSize - 8)" height="@(CellSize - 8)" rx="7" />
+                <path class="crate-line" d="@CrateCross(x, y)" />
+            </g>
+        }
+    }
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public BoardSnapshot Board { get; set; } = default!;
+
+    [Parameter]
+    public int CellSize { get; set; } = 48;
+
+    private BoardSnapshot? _lastRenderedBoard;
+
+    protected override bool ShouldRender()
+    {
+        if (ReferenceEquals(_lastRenderedBoard, Board))
+        {
+            return false;
+        }
+
+        _lastRenderedBoard = Board;
+        return true;
+    }
+
+    private static string FloorClass(int x, int y) => ((x + y) & 1) == 0 ? "floor-cell alt" : "floor-cell";
+
+    private string CrateCross(int x, int y)
+    {
+        var left = x * CellSize + 12;
+        var right = (x + 1) * CellSize - 12;
+        var top = y * CellSize + 12;
+        var bottom = (y + 1) * CellSize - 12;
+        return $"M{left} {top} L{right} {bottom} M{right} {top} L{left} {bottom}";
+    }
+}

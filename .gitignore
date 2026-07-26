@@ -1,0 +1,40 @@
+# .NET build and publish output
+**/[Bb]in/
+**/[Oo]bj/
+/.artifacts/
+**/[Pp]ublish/
+
+# Test and coverage output
+**/TestResults/
+**/coverage/
+*.trx
+*.coverage
+*.coveragexml
+
+# IDE and per-user state
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+# Runtime and OS files
+*.log
+*.pid
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Local credentials and signing material
+.env
+.env.*
+!.env.example
+**/appsettings.*.local.json
+**/secrets.json
+*.pfx
+*.p12
+*.pem
+*.key

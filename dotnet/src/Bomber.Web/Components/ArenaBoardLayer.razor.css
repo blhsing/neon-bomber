@@ -1,0 +1,6 @@
+.floor-cell { fill: #091126; }
+.floor-cell.alt { fill: #0b1530; }
+.solid-cell { fill: url(#wallGradient); stroke: rgba(107, 235, 255, .36); stroke-width: 1.2; }
+.wall-core { fill: none; stroke: rgba(93, 233, 255, .17); stroke-width: 1; }
+.crate-cell { fill: url(#crateGradient); stroke: #995cf7; stroke-width: 1.2; }
+.crate-line { stroke: rgba(228, 184, 255, .42); stroke-width: 2.2; }

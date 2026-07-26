@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Bomber.Core/Bomber.Core.csproj" />
+    <Project Path="src/Bomber.Launcher/Bomber.Launcher.csproj" />
+    <Project Path="src/Bomber.Web/Bomber.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Bomber.Core.Tests/Bomber.Core.Tests.csproj" />
+  </Folder>
+</Solution>

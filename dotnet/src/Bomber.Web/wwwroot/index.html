@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>霓虹爆彈王 · .NET Edition</title>
+    <base href="/" />
+    <link rel="preload" id="webassembly" />
+    <meta name="theme-color" content="#070a1c" />
+    <meta name="description" content="以 Blazor WebAssembly 與 C# 打造的霓虹爆彈競技場。" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png" />
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link href="Bomber.Web.styles.css" rel="stylesheet" />
+    <script type="importmap"></script>
+</head>
+
+<body>
+    <div id="app">
+        <img class="loading-mark" src="assets/icons/icon-192.png" alt="" />
+        <svg class="loading-progress" aria-label="正在載入 .NET 遊戲">
+            <circle r="40%" cx="50%" cy="50%" />
+            <circle r="40%" cx="50%" cy="50%" />
+        </svg>
+        <div class="loading-progress-text"></div>
+    </div>
+
+    <div id="blazor-error-ui">
+        遊戲發生未預期的錯誤。
+        <a href="." class="reload">重新載入</a>
+        <span class="dismiss">🗙</span>
+    </div>
+    <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
+</body>
+
+</html>

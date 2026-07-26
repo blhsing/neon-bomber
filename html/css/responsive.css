@@ -1,0 +1,2 @@
+    @media(max-width:760px){.slots{grid-template-columns:repeat(2,1fr)}.panel{padding:15px}.subtitle{margin-bottom:12px}.keys{min-height:0}.slot{padding:10px}.options{margin-bottom:10px}h1{font-size:34px}.screen{align-items:start}.panel{margin:auto}.modal-card{max-height:94vh}}
+    @media(max-height:680px) and (min-width:761px){.panel{padding:15px 24px}.subtitle{margin:5px 0 10px}.slot{padding:9px}.keys{min-height:25px;line-height:1.35}.options{margin-bottom:8px}.warning{margin-top:5px}.primary,.secondary{padding:9px 22px}}
