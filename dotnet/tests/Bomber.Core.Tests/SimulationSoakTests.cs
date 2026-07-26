@@ -27,7 +27,7 @@ public sealed class SimulationSoakTests
         session.StartMatch();
         for (var playerId = 0; playerId < 4; playerId++)
         {
-            session.DebugApplyPowerUp(playerId, PowerUpKind.FlamePass);
+            session.DebugSetInvulnerability(playerId, 3600);
             session.DebugApplyPowerUp(playerId, PowerUpKind.BombCapacity);
             session.DebugApplyPowerUp(playerId, PowerUpKind.FireRange);
         }
@@ -96,7 +96,7 @@ public sealed class SimulationSoakTests
         // item collection, AI planning, and snapshot projection run at high frequency.
         for (var playerId = 0; playerId < 4; playerId++)
         {
-            session.DebugApplyPowerUp(playerId, PowerUpKind.FlamePass);
+            session.DebugSetInvulnerability(playerId, 3600);
             session.DebugApplyPowerUp(playerId, PowerUpKind.BombCapacity);
             session.DebugApplyPowerUp(playerId, PowerUpKind.BombCapacity);
             session.DebugApplyPowerUp(playerId, PowerUpKind.FireRange);

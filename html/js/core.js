@@ -42,7 +42,7 @@ const POWERS={
  pierce:{name:'電漿針',color:'#d7fbff',desc:'烈焰可貫穿一個能量箱',weight:4},
  bombpass:{name:'虛相靴',color:'#aa91ff',desc:'可以穿過靜止爆彈',weight:4},
  wallpass:{name:'量子鑽',color:'#cb7dff',desc:'可以穿過能量箱',weight:3},
- flamepass:{name:'鳳凰甲',color:'#ffac4d',desc:'永久免疫一般烈焰',weight:2},
+ flamepass:{name:'鳳凰甲',color:'#ffac4d',desc:'永久免疫自己的爆彈烈焰',weight:2},
  shield:{name:'光子護盾',color:'#62dfff',desc:'抵擋下一次傷害',weight:8},
  heart:{name:'生命晶核',color:'#ff6585',desc:'增加一顆生命，最多三顆',weight:5},
  dash:{name:'脈衝引擎',color:'#7dfffb',desc:'技能鍵高速衝刺，可充能',weight:5},

@@ -56,6 +56,14 @@ public sealed partial class GameSession
             {
                 UpdateAi(player);
                 (horizontal, vertical) = GetAiMovement(player);
+                // Compensate before the shared status-effect inversion below so an AI follows
+                // its planned safe route even while afflicted by reversed controls.
+                if (player.Reversed > 0)
+                {
+                    horizontal = -horizontal;
+                    vertical = -vertical;
+                }
+
                 placeBomb = player.AiBombRequested;
                 useAction = player.AiActionRequested;
                 player.AiBombRequested = false;
@@ -82,11 +90,15 @@ public sealed partial class GameSession
                 vertical = -vertical;
             }
 
-            MovePlayer(player, horizontal, vertical, deltaSeconds);
             if (placeBomb)
             {
                 TryPlaceBomb(player);
             }
+
+            // AI escape planning and human input both refer to the tile occupied when the
+            // button was pressed. Place before movement so a fast or dashing player cannot
+            // cross a boundary and create the bomb on a different, unplanned tile.
+            MovePlayer(player, horizontal, vertical, deltaSeconds);
 
             if (useAction)
             {
@@ -698,10 +710,7 @@ public sealed partial class GameSession
         {
             if (bomb.IsGhost)
             {
-                if (owner.ActiveGhostBombId == bomb.Id)
-                {
-                    owner.ActiveGhostBombId = null;
-                }
+                owner.ActiveGhostBombs = Math.Max(0, owner.ActiveGhostBombs - 1);
             }
             else
             {
@@ -776,6 +785,7 @@ public sealed partial class GameSession
         var ghostKillCandidates = new List<(PlayerState Victim, FlameState Source, double X, double Y)>();
         foreach (var flame in _flames.Where(candidate => candidate.Remaining > 0))
         {
+            _items.RemoveAll(item => item.FlameGrace <= 0 && item.Cell == flame.Cell);
             foreach (var player in _players.Where(candidate => candidate.IsAlive && candidate.Cell == flame.Cell).ToArray())
             {
                 var deathX = player.X;
@@ -800,7 +810,8 @@ public sealed partial class GameSession
 
     private bool HurtPlayer(PlayerState player, FlameState flame)
     {
-        if (!player.IsAlive || player.Invulnerability > 0 || player.IsFlameproof)
+        if (!player.IsAlive || player.Invulnerability > 0 ||
+            player.IsFlameproof && flame.SourcePlayerId == player.Id)
         {
             return false;
         }
@@ -844,7 +855,8 @@ public sealed partial class GameSession
             Id = ++_nextItemId,
             X = cell.X + 0.5,
             Y = cell.Y + 0.5,
-            Definition = PowerUpCatalog.Select(_random)
+            Definition = PowerUpCatalog.Select(_random),
+            FlameGrace = _configuration.FlameLifetimeSeconds
         });
     }
 
@@ -854,6 +866,7 @@ public sealed partial class GameSession
         {
             var item = _items[index];
             item.Remaining -= deltaSeconds;
+            item.FlameGrace = Math.Max(0, item.FlameGrace - deltaSeconds);
             if (item.Remaining <= 0)
             {
                 _items.RemoveAt(index);
@@ -1109,6 +1122,12 @@ public sealed partial class GameSession
     {
         var player = FindPlayer(playerId) ?? throw new ArgumentOutOfRangeException(nameof(playerId));
         ApplyPowerUp(player, kind);
+    }
+
+    internal void DebugSetInvulnerability(int playerId, double seconds)
+    {
+        var player = FindPlayer(playerId) ?? throw new ArgumentOutOfRangeException(nameof(playerId));
+        player.Invulnerability = seconds;
     }
 
     internal long DebugPlaceBomb(

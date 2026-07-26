@@ -28,7 +28,7 @@ public sealed class GhostMechanicsTests
 
         Assert.True(session.SetControls(0, PlayerControls.None));
         session.Tick(1.0 / 60);
-        Assert.True(session.SetControls(0, new PlayerControls(Horizontal: 0, Vertical: 1, PlaceBomb: true)));
+        Assert.True(session.SetControls(0, new PlayerControls(Horizontal: 0, Vertical: 0, PlaceBomb: true)));
         session.Tick(1.0 / 60);
 
         var bomb = Assert.Single(session.Bombs, candidate => candidate.IsGhost);
@@ -37,11 +37,13 @@ public sealed class GhostMechanicsTests
         Assert.False(session.Players[0].IsGhostBombReady);
         Assert.Equal(0, session.Players[0].ActiveBombs);
         Assert.Equal(1, session.Players[0].Statistics.GhostBombsThrown);
+        Assert.Equal(0, session.Players[0].FacingX);
+        Assert.Equal(1, session.Players[0].FacingY);
 
         var landingCell = bomb.Cell;
         Assert.True(session.SetControls(0, PlayerControls.None));
         session.Tick(1.0 / 60);
-        Assert.True(session.SetControls(0, new PlayerControls(Horizontal: 0, Vertical: 1, PlaceBomb: true)));
+        Assert.True(session.SetControls(0, new PlayerControls(Horizontal: 0, Vertical: 0, PlaceBomb: true)));
         session.Tick(1.0 / 60);
         Assert.Single(session.Bombs, candidate => candidate.IsGhost);
         Assert.Equal(1, session.Players[0].Statistics.GhostBombsThrown);
@@ -61,6 +63,72 @@ public sealed class GhostMechanicsTests
         Assert.True(bomb.FuseSeconds < 1.9);
         Assert.NotEmpty(bomb.FlamePreviewCells);
         Assert.Contains(1, session.DebugBombPassThroughPlayers(bomb.Id));
+    }
+
+    [Fact]
+    public void GhostRetainsBombCapacityAndBombModifiers()
+    {
+        var session = CreateSession(playerCount: 4);
+        session.DebugApplyPowerUp(0, PowerUpKind.BombCapacity);
+        session.DebugApplyPowerUp(0, PowerUpKind.FireRange);
+        session.DebugApplyPowerUp(0, PowerUpKind.Remote);
+        session.DebugApplyPowerUp(0, PowerUpKind.Pierce);
+        session.DebugApplyPowerUp(0, PowerUpKind.BrickDisguise);
+        session.DebugApplyPowerUp(0, PowerUpKind.Mega);
+        session.DebugApplyPowerUp(0, PowerUpKind.Cluster);
+        session.DebugEliminatePlayer(0);
+
+        Assert.True(session.SetControls(0, new PlayerControls(0, 0, PlaceBomb: true)));
+        session.Tick(1.0 / 60);
+
+        var first = Assert.Single(session.Bombs, bomb => bomb.IsGhost);
+        Assert.Equal(2, first.FireRange);
+        Assert.Equal(8, first.FuseSeconds, precision: 6);
+        Assert.True(first.IsPiercing);
+        Assert.True(first.IsBrickDisguised);
+        Assert.True(first.IsMega);
+        Assert.True(first.IsCluster);
+        Assert.Equal(1, session.Players[0].ActiveGhostBombs);
+        Assert.True(session.Players[0].IsGhostBombReady);
+
+        session.Tick(0.55);
+        Assert.True(session.SetControls(0, PlayerControls.None));
+        session.Tick(1.0 / 60);
+        Assert.True(session.SetControls(0, new PlayerControls(0, 0, PlaceBomb: true)));
+        session.Tick(1.0 / 60);
+
+        Assert.Equal(2, session.Bombs.Count(bomb => bomb.IsGhost));
+        Assert.Equal(2, session.Players[0].ActiveGhostBombs);
+        Assert.False(session.Players[0].IsGhostBombReady);
+    }
+
+    [Fact]
+    public void GhostRetainsSpeedAndCanRemoteDetonateLandedBomb()
+    {
+        var normal = CreateSession(playerCount: 4);
+        var fast = CreateSession(playerCount: 4);
+        for (var count = 0; count < 3; count++)
+        {
+            fast.DebugApplyPowerUp(0, PowerUpKind.Speed);
+        }
+
+        normal.DebugEliminatePlayer(0);
+        fast.DebugEliminatePlayer(0);
+        Assert.True(normal.SetControls(0, new PlayerControls(1, 0)));
+        Assert.True(fast.SetControls(0, new PlayerControls(1, 0)));
+        normal.Tick(0.10);
+        fast.Tick(0.10);
+        Assert.True(fast.Players[0].X > normal.Players[0].X);
+
+        fast.DebugApplyPowerUp(0, PowerUpKind.Remote);
+        var bombId = fast.DebugPlaceGhostBomb(0, new GridPosition(5, 5), fuse: 8);
+        Assert.True(fast.SetControls(0, PlayerControls.None));
+        fast.Tick(1.0 / 60);
+        Assert.True(fast.SetControls(0, new PlayerControls(0, 0, UseAction: true)));
+        fast.Tick(1.0 / 60);
+
+        Assert.DoesNotContain(fast.Bombs, bomb => bomb.Id == bombId);
+        Assert.Contains(fast.Flames, flame => flame.SourceBombId == bombId);
     }
 
     [Fact]

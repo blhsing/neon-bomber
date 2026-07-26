@@ -26,7 +26,7 @@ public static class PowerUpCatalog
         new("pierce", PowerUpKind.Pierce, "電漿針", "#d7fbff", "烈焰可貫穿一個能量箱", 4),
         new("bombpass", PowerUpKind.BombPass, "虛相靴", "#aa91ff", "可以穿過靜止爆彈", 4),
         new("wallpass", PowerUpKind.WallPass, "量子鑽", "#cb7dff", "可以穿過能量箱", 3),
-        new("flamepass", PowerUpKind.FlamePass, "鳳凰甲", "#ffac4d", "永久免疫一般烈焰", 2),
+        new("flamepass", PowerUpKind.FlamePass, "鳳凰甲", "#ffac4d", "永久免疫自己的爆彈烈焰", 2),
         new("shield", PowerUpKind.Shield, "光子護盾", "#62dfff", "抵擋下一次傷害", 8),
         new("heart", PowerUpKind.Heart, "生命晶核", "#ff6585", "增加一顆生命，最多三顆", 5),
         new("dash", PowerUpKind.Dash, "脈衝引擎", "#7dfffb", "技能鍵高速衝刺，可充能", 5),

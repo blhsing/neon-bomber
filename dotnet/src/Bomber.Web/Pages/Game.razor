@@ -239,7 +239,7 @@
                             var bombStroke = bomb.IsGhost ? "#ead8ff" : ownerColor;
                             <g @key="@($"bomb:{bomb.Id}")" transform="@BombTransform(bomb)" style="@PlayerStyle(ownerColor)">
                                 <g class="bomb-entity @(bomb.IsGhost ? "ghost-bomb" : null) @(bomb.IsAirborne ? "airborne" : null)">
-                                    @if (bomb.IsBrickDisguised && !bomb.IsGhost)
+                                    @if (bomb.IsBrickDisguised)
                                     {
                                         <g class="brick-bomb-disguise" aria-hidden="true">
                                             <rect class="crate-cell" x="-20" y="-20" width="40" height="40" rx="7" />
@@ -907,7 +907,7 @@
     {
         if (player.IsGhostBombReady)
         {
-            return "可投爆彈";
+            return $"可投爆彈 · {player.BombsAvailable}/{player.BombCapacity}";
         }
 
         var bomb = ActiveGhostBomb(player.Id);
@@ -918,7 +918,7 @@
     {
         if (player.IsGhostBombReady)
         {
-            return "就緒";
+            return $"{player.BombsAvailable}/{player.BombCapacity}";
         }
 
         return ActiveGhostBomb(player.Id)?.IsAirborne == true ? "飛行" : "等待";

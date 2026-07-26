@@ -19,15 +19,17 @@ public sealed partial class GameSession
         var horizontal = 0.0;
         var vertical = 0.0;
         var throwBomb = false;
+        var useAction = false;
         if (player.Kind == PlayerKind.Computer)
         {
-            (horizontal, vertical, throwBomb) = GetGhostAiActions(player);
+            (horizontal, vertical, throwBomb, useAction) = GetGhostAiActions(player);
         }
         else
         {
             horizontal = player.Controls.Horizontal;
             vertical = player.Controls.Vertical;
             throwBomb = player.BombRequested;
+            useAction = player.ActionRequested;
             player.BombRequested = false;
             player.ActionRequested = false;
         }
@@ -37,9 +39,14 @@ public sealed partial class GameSession
         {
             TryThrowGhostBomb(player);
         }
+
+        if (useAction)
+        {
+            UseGhostAction(player);
+        }
     }
 
-    private (double Horizontal, double Vertical, bool ThrowBomb) GetGhostAiActions(PlayerState player)
+    private (double Horizontal, double Vertical, bool ThrowBomb, bool UseAction) GetGhostAiActions(PlayerState player)
     {
         var living = _players.Where(candidate => candidate.IsAlive).ToArray();
         if (living.Length < 2)
@@ -94,7 +101,8 @@ public sealed partial class GameSession
             player.AiIntent = "Ghost tracking";
             var current = GhostPoint(player.GhostTrack);
             var next = GhostPoint(player.GhostTrack + (Math.Sign(delta) * 0.08));
-            return (next.X - current.X, next.Y - current.Y, false);
+            var useDash = !player.HasRemote && player.DashCharges > 0 && player.DashTime <= 0 && Math.Abs(delta) > 3;
+            return (next.X - current.X, next.Y - current.Y, false, useDash);
         }
 
         player.GhostTrack = WrapGhostTrack(player.GhostAimTrack);
@@ -103,8 +111,12 @@ public sealed partial class GameSession
         player.Y = position.Y;
         player.FacingX = player.GhostAimFacingX;
         player.FacingY = player.GhostAimFacingY;
-        player.AiIntent = player.ActiveGhostBombId is null ? "Ghost ambush" : "Ghost waiting";
-        return (player.FacingX, player.FacingY, player.ActiveGhostBombId is null);
+        var activeBombs = ActiveGhostBombs(player).ToArray();
+        var useRemote = player.HasRemote && activeBombs.Length >= player.BombCapacity &&
+            activeBombs.Any(bomb => !bomb.IsAirborne);
+        var canThrow = activeBombs.Length < player.BombCapacity && activeBombs.All(bomb => !bomb.IsAirborne);
+        player.AiIntent = useRemote ? "Ghost remote detonation" : canThrow ? "Ghost ambush" : "Ghost waiting";
+        return (player.FacingX, player.FacingY, canThrow, useRemote);
     }
 
     private void MoveGhost(PlayerState player, double horizontal, double vertical, double deltaSeconds)
@@ -136,7 +148,10 @@ public sealed partial class GameSession
         if (Math.Max(plusScore, minusScore) > 0.003)
         {
             var direction = plusScore > minusScore ? 1 : -1;
-            player.GhostTrack = WrapGhostTrack(player.GhostTrack + (direction * GhostMoveSpeed * deltaSeconds));
+            var speedScale = player.MoveSpeed / 3.15;
+            var dashScale = player.DashTime > 0 ? 2.15 : 1;
+            player.GhostTrack = WrapGhostTrack(player.GhostTrack +
+                (direction * GhostMoveSpeed * speedScale * dashScale * deltaSeconds));
         }
 
         var position = GhostPoint(player.GhostTrack);
@@ -147,11 +162,14 @@ public sealed partial class GameSession
     private bool TryThrowGhostBomb(PlayerState player)
     {
         if (!player.IsGhost || player.IsAlive || _players.Count(candidate => candidate.IsAlive) < 2 ||
-            player.ActiveGhostBombId is not null)
+            player.ActiveGhostBombs >= player.BombCapacity)
         {
             return false;
         }
 
+        var railPosition = GhostPoint(player.GhostTrack);
+        player.FacingX = railPosition.InwardX;
+        player.FacingY = railPosition.InwardY;
         var landingCells = GetGhostLandingCells(player.GhostTrack, player.FacingX, player.FacingY);
         if (landingCells.Count == 0)
         {
@@ -159,11 +177,49 @@ public sealed partial class GameSession
         }
 
         var target = landingCells[_random.NextInt(landingCells.Count)];
-        var bomb = CreateGhostBomb(player, target, GhostBombFuseSeconds, player.FireRange, airborne: true);
+        var isMega = player.MegaCharges > 0;
+        var isCluster = player.ClusterCharges > 0;
+        if (isMega) player.MegaCharges--;
+        if (isCluster) player.ClusterCharges--;
+        var fuse = player.HasRemote ? 8 : GhostBombFuseSeconds;
+        var bomb = CreateGhostBomb(
+            player,
+            target,
+            fuse,
+            player.FireRange,
+            airborne: true,
+            isMega: isMega,
+            isCluster: isCluster);
         bomb.GhostLandingCandidates.AddRange(landingCells);
-        player.ActiveGhostBombId = bomb.Id;
+        player.ActiveGhostBombs++;
         player.Statistics.GhostBombsThrown++;
         return true;
+    }
+
+    private IEnumerable<BombState> ActiveGhostBombs(PlayerState player) =>
+        _bombs.Where(bomb => !bomb.IsExploded && bomb.IsGhost && bomb.OwnerPlayerId == player.Id);
+
+    private void UseGhostAction(PlayerState player)
+    {
+        if (player.HasRemote)
+        {
+            var oldest = ActiveGhostBombs(player)
+                .Where(bomb => !bomb.IsAirborne)
+                .OrderBy(bomb => bomb.Id)
+                .FirstOrDefault();
+            if (oldest is not null)
+            {
+                oldest.Fuse = 0;
+            }
+
+            return;
+        }
+
+        if (player.DashCharges > 0 && player.DashTime <= 0)
+        {
+            player.DashCharges--;
+            player.DashTime = 0.34;
+        }
     }
 
     private BombState CreateGhostBomb(
@@ -171,7 +227,9 @@ public sealed partial class GameSession
         GridPosition cell,
         double fuse,
         int range,
-        bool airborne)
+        bool airborne,
+        bool isMega = false,
+        bool isCluster = false)
     {
         var bomb = new BombState
         {
@@ -181,7 +239,10 @@ public sealed partial class GameSession
             Fuse = fuse,
             InitialFuse = Math.Max(fuse, 0.001),
             Range = Math.Clamp(range, 1, PlayerCaps.FireRange),
+            IsMega = isMega,
+            IsCluster = isCluster,
             IsPiercing = owner.HasPiercingFlames,
+            IsBrickDisguised = owner.HasBrickDisguise,
             IsGhost = true,
             SourceGhostGeneration = owner.GhostGeneration,
             AirborneDuration = airborne ? GhostBombFlightSeconds : 0,
@@ -282,9 +343,9 @@ public sealed partial class GameSession
         bomb.IsExploded = true;
         _usedGhostRevivalSources.Add(bomb.Id);
         var owner = FindPlayer(bomb.OwnerPlayerId);
-        if (owner?.ActiveGhostBombId == bomb.Id)
+        if (owner is not null)
         {
-            owner.ActiveGhostBombId = null;
+            owner.ActiveGhostBombs = Math.Max(0, owner.ActiveGhostBombs - 1);
         }
     }
 
@@ -309,7 +370,7 @@ public sealed partial class GameSession
         player.GhostThinkRemaining = 0;
         player.GhostTargetPlayerId = null;
         player.HasGhostAim = false;
-        player.ActiveGhostBombId = null;
+        player.ActiveGhostBombs = 0;
         foreach (var bomb in _bombs)
         {
             bomb.PassThroughPlayers.Remove(player.Id);
@@ -372,7 +433,7 @@ public sealed partial class GameSession
         player.ClearBufferedTurn();
         player.GhostTargetPlayerId = null;
         player.HasGhostAim = false;
-        player.ActiveGhostBombId = null;
+        player.ActiveGhostBombs = 0;
         player.AiThinkRemaining = 0;
         player.AiRoute.Clear();
         player.AiIntent = "Revived";
@@ -453,7 +514,7 @@ public sealed partial class GameSession
         }
 
         var bomb = CreateGhostBomb(player, cell, fuse, player.FireRange, airborne: false);
-        player.ActiveGhostBombId = bomb.Id;
+        player.ActiveGhostBombs++;
         player.Statistics.GhostBombsThrown++;
         return bomb.Id;
     }

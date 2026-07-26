@@ -38,13 +38,13 @@ function buildDangerForecast(horizon=4.5,extras=[],forcedTimes=null){
   const bombBlocked=(x,y,at,p)=>{if(p.bombpass)return false;return specs.some((s,i)=>at>=(s.landAt||0)&&at<times[i]-.025&&((s.blockX===x&&s.blockY===y)||(s.x===x&&s.y===y)))};
  return{horizon,specs,times,shapes:finalShapes,windows,dangerDuring,nextDanger,bombBlocked,maxEnd:Math.max(0,...[...windows.values()].flat().map(w=>w.end)),timeForTag:tag=>{let i=specs.findIndex(s=>s.tag===tag);return i<0?Infinity:times[i]},cellsForTag:tag=>{let i=specs.findIndex(s=>s.tag===tag);return i<0?[]:finalShapes[i].all},cellsForRef:ref=>{let i=specs.findIndex(s=>s.ref===ref);return i<0?[]:finalShapes[i].all}};
 }
-function aiDangerDuring(p,forecast,x,y,a,b,margin){return!p.flamepass&&forecast.dangerDuring(x,y,a,b,margin)}
+function aiDangerDuring(p,forecast,x,y,a,b,margin){return forecast.dangerDuring(x,y,a,b,margin)}
 function reconstructTimed(nodes,index){let route=[];while(index>=0&&nodes[index].parent>=0){route.push({x:nodes[index].x,y:nodes[index].y,t:nodes[index].t});index=nodes[index].parent}return route.reverse()}
 function findSurvivalRoute(p,forecast,endTime,cfg,allowWait=true){
- let sx=Math.floor(p.x),sy=Math.floor(p.y);if(p.flamepass)return[];endTime=Math.min(forecast.horizon,Math.max(.2,endTime));
+ let sx=Math.floor(p.x),sy=Math.floor(p.y);endTime=Math.min(forecast.horizon,Math.max(.2,endTime));
  let step=aiStepTime(p),maxSteps=Math.min(56,Math.ceil(endTime/step)+5),nodes=[{x:sx,y:sy,step:0,t:0,parent:-1}],queue=[0],head=0,seen=new Set([key(sx,sy)+',0']),dirs=rotatedAIDirs(p),margin=cfg.margin;
  while(head<queue.length){let index=queue[head++],n=nodes[index];if(!aiDangerDuring(p,forecast,n.x,n.y,n.t,endTime,margin))return reconstructTimed(nodes,index);if(n.step>=maxSteps)continue;
-   let actions=allowWait?dirs.concat([[0,0]]):dirs;for(const [dx,dy] of actions){let x=n.x+dx,y=n.y+dy,nt=n.t+step,ns=n.step+1,moving=!!(dx||dy);if(moving){if(!walkable(p,x,y)||forecast.bombBlocked(x,y,nt,p))continue;if(n.step>0&&aiDangerDuring(p,forecast,n.x,n.y,n.t,n.t+step*.42,margin))continue;if(aiDangerDuring(p,forecast,x,y,n.t+step*.25,nt,margin))continue}else if(aiDangerDuring(p,forecast,x,y,n.t,nt,margin))continue;
+   let actions=allowWait?dirs.concat([[0,0]]):dirs;for(const [dx,dy] of actions){let x=n.x+dx,y=n.y+dy,nt=n.t+step,ns=n.step+1,moving=!!(dx||dy);if(moving){if(!walkable(p,x,y)||forecast.bombBlocked(x,y,nt,p))continue;if(aiDangerDuring(p,forecast,n.x,n.y,n.t,n.t+step*.42,margin))continue;if(aiDangerDuring(p,forecast,x,y,n.t+step*.25,nt,margin))continue}else if(aiDangerDuring(p,forecast,x,y,n.t,nt,margin))continue;
      let sk=key(x,y)+','+ns;if(seen.has(sk))continue;seen.add(sk);nodes.push({x,y,step:ns,t:nt,parent:index});queue.push(nodes.length-1);
    }
  }
@@ -63,7 +63,7 @@ function syncAIWaypoint(p){
 function clearAIRoute(p){p.aiRoute=[];p.aiRouteIndex=0;p.aiRouteStarted=time;p.aiRouteLock=false;p.aiGoal=null;p.aiWaypoint=null;p.aiProgressKey=null;p.aiProgressDistance=Infinity;p.aiProgressAt=time}
 function abandonAIRoute(p,reason){let hadRoute=p.aiRouteLock||p.aiWaypoint||p.aiRouteIndex<p.aiRoute.length;clearAIRoute(p);if(hadRoute){p.aiStats.recoveries=(p.aiStats.recoveries||0)+1;p.aiLastRecovery={reason,at:time,tile:[Math.floor(p.x),Math.floor(p.y)]}}}
 function setAIRoute(p,route,mode,goal=null){p.aiRoute=route||[];p.aiRouteIndex=0;p.aiRouteStarted=time;p.aiRouteLock=goal==='安全區'||goal==='爆彈逃生';p.aiMode=mode;p.aiGoal=goal;p.aiWaypoint=null;p.aiProgressKey=null;p.aiProgressDistance=Infinity;p.aiProgressAt=time;syncAIWaypoint(p)}
-function lockedAIRouteHasThreat(p,forecast){if(!p.aiRouteLock||p.flamepass)return false;let cells=[{x:Math.floor(p.x),y:Math.floor(p.y)}].concat(p.aiRoute.slice(p.aiRouteIndex));return cells.some(c=>forecast.windows.has(key(c.x,c.y)))}
+function lockedAIRouteHasThreat(p,forecast){if(!p.aiRouteLock)return false;let cells=[{x:Math.floor(p.x),y:Math.floor(p.y)}].concat(p.aiRoute.slice(p.aiRouteIndex));return cells.some(c=>forecast.windows.has(key(c.x,c.y)))}
 function lockedAIRouteWaiting(p){if(!p.aiRouteLock)return false;let n=p.aiRoute[p.aiRouteIndex],sx=Math.floor(p.x),sy=Math.floor(p.y);return!!n&&n.x===sx&&n.y===sy&&time+.015<p.aiRouteStarted+(n.t||0)}
 function aiWaypointStalled(p){let w=p.aiWaypoint;if(!w){p.aiProgressKey=null;p.aiProgressDistance=Infinity;p.aiProgressAt=time;return false}let token=`${w.x},${w.y},${w.centering?'置中':'移動'}`,distance=Math.hypot(w.x+.5-p.x,w.y+.5-p.y);if(p.aiProgressKey!==token){p.aiProgressKey=token;p.aiProgressDistance=distance;p.aiProgressAt=time;return false}if(distance<p.aiProgressDistance-.025){p.aiProgressDistance=distance;p.aiProgressAt=time;return false}return time-p.aiProgressAt>.9}
 function lockedAIRouteSafe(p,forecast,cfg){
@@ -85,12 +85,12 @@ function bombOpportunity(p,x,y,cfg){
 function evaluateBombPlacement(p,x,y,cfg){
  let tag=`假想爆彈-${p.id}`,extra=hypotheticalBomb(p,x,y,tag),horizon=Math.max(cfg.horizon,extra.fuse+1.05),forecast=buildDangerForecast(horizon,[extra]),detonation=forecast.timeForTag(tag),end=Math.min(horizon,detonation+.82+cfg.margin),escape=findSurvivalRoute(p,forecast,end,cfg,false);
  if(escape===null){p.aiStats.bombsRejected++;return null}let opportunity=bombOpportunity(p,x,y,cfg),blast=new Set(forecast.cellsForTag(tag).map(c=>key(c.x,c.y))),trapBonus=0;
- for(const q of players){if(q===p||!q.alive||q.flamepass)continue;let qx=Math.floor(q.x),qy=Math.floor(q.y);if(!blast.has(key(qx,qy)))continue;let enemyEscape=findSurvivalRoute(q,forecast,end,{...cfg,margin:Math.max(.02,cfg.margin*.6)});if(enemyEscape===null)trapBonus+=8;else trapBonus+=Math.max(0,3-enemyEscape.filter((n,i,a)=>i===0||n.x!==a[i-1].x||n.y!==a[i-1].y).length)}
+ for(const q of players){if(q===p||!q.alive)continue;let qx=Math.floor(q.x),qy=Math.floor(q.y);if(!blast.has(key(qx,qy)))continue;let enemyEscape=findSurvivalRoute(q,forecast,end,{...cfg,margin:Math.max(.02,cfg.margin*.6)});if(enemyEscape===null)trapBonus+=8;else trapBonus+=Math.max(0,3-enemyEscape.filter((n,i,a)=>i===0||n.x!==a[i-1].x||n.y!==a[i-1].y).length)}
  p.aiStats.bombsVerified++;return{escape,forecast,detonation,opportunity,score:opportunity.score+trapBonus,trapBonus};
 }
 function considerRemoteDetonation(p,cfg){
  if(!p.remote||p.aiBombCd>0)return false;let own=bombs.filter(b=>b.owner===p&&!b.dead&&!b.ghost&&!b.airborne).sort((a,b)=>a.born-b.born)[0];if(!own)return false;let forced=new Map([[own,.04]]),forecast=buildDangerForecast(Math.max(1.1,cfg.horizon),[],forced),blast=new Set(forecast.cellsForRef(own).map(c=>key(c.x,c.y))),victims=players.filter(q=>q!==p&&q.alive&&blast.has(key(Math.floor(q.x),Math.floor(q.y))));if(!victims.length)return false;
- let sx=Math.floor(p.x),sy=Math.floor(p.y),selfSafe=p.flamepass||!forecast.dangerDuring(sx,sy,0,.9,cfg.margin);if(!selfSafe)return false;let value=victims.reduce((n,q)=>n+2+(q.shield?0:1)+(q.hp===1?1:0),0);if(value<2.5+(1-cfg.aggression)*1.5||Math.random()<cfg.mistake)return false;
+ let sx=Math.floor(p.x),sy=Math.floor(p.y),selfSafe=!forecast.dangerDuring(sx,sy,0,.9,cfg.margin);if(!selfSafe)return false;let value=victims.reduce((n,q)=>n+2+(q.shield?0:1)+(q.hp===1?1:0),0);if(value<2.5+(1-cfg.aggression)*1.5||Math.random()<cfg.mistake)return false;
  p.aiQueuedSkill=true;p.aiBombCd=.62;p.aiMode='遙控伏擊';p.aiStats.trapsPlanned++;return true;
 }
 function emergencyBombControl(p,forecast){
@@ -107,7 +107,7 @@ function chooseAIObjective(p,forecast,cfg,leaveCurrent=false){
 }
 function decideAI(p,cfg,forecast=null){
  p.aiStats.decisions++;let sx=Math.floor(p.x),sy=Math.floor(p.y),visitKey=key(sx,sy);p.aiVisited.set(visitKey,time);if(p.aiVisited.size>70)for(const [k,t] of p.aiVisited)if(time-t>12)p.aiVisited.delete(k);
- forecast=forecast||buildDangerForecast(cfg.horizon);let eta=p.flamepass?Infinity:forecast.nextDanger(sx,sy,0);p.aiDangerETA=eta;
+ forecast=forecast||buildDangerForecast(cfg.horizon);let eta=forecast.nextDanger(sx,sy,0);p.aiDangerETA=eta;
  if(eta<=cfg.escapeLead){let end=Math.min(cfg.horizon,Math.max(.9,forecast.maxEnd)),escape=findSurvivalRoute(p,forecast,end,cfg);if(escape?.length){setAIRoute(p,escape,eta<.5?'緊急閃避':'預判逃生','安全區');p.aiStats.escapes++;let remoteWouldFire=p.remote&&bombs.some(b=>b.owner===p&&!b.dead&&!b.ghost&&!b.airborne);if(p.dash>0&&eta<.68&&!remoteWouldFire)p.aiQueuedSkill=true;return}if(escape===null&&emergencyBombControl(p,forecast))return;if(escape===null){setAIRoute(p,[],'受困求生');return}}
  if(considerRemoteDetonation(p,cfg))return;
  let centered=Math.abs(p.x-(sx+.5))<.14&&Math.abs(p.y-(sy+.5))<.14,canPlant=centered&&p.aiBombCd<=0&&p.bombsLive<p.bombsMax&&!bombReservationAt(sx,sy)&&eta>Math.min(.75,cfg.escapeLead),leaveCurrent=false;
@@ -117,10 +117,13 @@ function decideAI(p,cfg,forecast=null){
 function replanBombEscape(p,forecast,cfg){let end=Math.min(forecast.horizon,Math.max(.9,forecast.maxEnd)),escape=findSurvivalRoute(p,forecast,end,cfg,false);if(escape?.length){setAIRoute(p,escape,'強制逃生','爆彈逃生');p.aiStats.escapes++;return true}if(escape===null){setAIRoute(p,[],'受困求生');return false}setAIRoute(p,[],'安全待命');return true}
 function thinkAI(p,dt){
  let cfg=AI_LEVELS[p.aiLevel]||AI_LEVELS.normal;p.aiThink-=dt;if(p.aiThink<=0){
-   p.aiThink=rand(cfg.thinkMax,cfg.thinkMin);let forcedEscape=p.aiGoal==='爆彈逃生'&&time<p.aiEscapeUntil,horizon=Math.max(cfg.horizon,forcedEscape?Math.min(10,p.aiEscapeUntil-time+.25):0),forecast=buildDangerForecast(horizon),replanned=false;
-   if(lockedAIRouteWaiting(p)&&!lockedAIRouteHasThreat(p,forecast)){abandonAIRoute(p,'危險解除');if(forcedEscape)p.aiEscapeUntil=0;forcedEscape=false}
+   p.aiThink=rand(cfg.thinkMax,cfg.thinkMin);let forcedEscape=time<p.aiEscapeUntil,horizon=Math.max(cfg.horizon,forcedEscape?Math.min(10,p.aiEscapeUntil-time+.25):0),forecast=buildDangerForecast(horizon),replanned=false;
+   // A safe final waypoint means the escape succeeded; it does not mean the planted bomb
+   // stopped being dangerous. Keep that commitment until its full blast window has passed.
+   if(!forcedEscape&&lockedAIRouteWaiting(p)&&!lockedAIRouteHasThreat(p,forecast))abandonAIRoute(p,'危險解除');
+   if(forcedEscape&&p.remote&&considerRemoteDetonation(p,cfg)){p.aiEscapeUntil=Math.min(p.aiEscapeUntil,time+1);forcedEscape=true}
    let w=p.aiWaypoint,step=aiStepTime(p),blockedWaypoint=w&&!w.centering&&(!walkable(p,w.x,w.y)||forecast.bombBlocked(w.x,w.y,step,p)),stalled=!blockedWaypoint&&aiWaypointStalled(p);if(blockedWaypoint||stalled){abandonAIRoute(p,blockedWaypoint?'目標受阻':'移動無進展');if(forcedEscape){replanBombEscape(p,forecast,cfg);replanned=true}}
-   let keepLocked=p.aiRouteLock&&lockedAIRouteSafe(p,forecast,cfg),committed=p.aiWaypoint&&Math.hypot(p.aiWaypoint.x+.5-p.x,p.aiWaypoint.y+.5-p.y)>=.075;if(!replanned&&forcedEscape&&!committed&&p.aiRouteIndex>=p.aiRoute.length){replanBombEscape(p,forecast,cfg);replanned=true}if(!replanned&&!committed&&!keepLocked)decideAI(p,cfg,forecast)
+   let keepLocked=p.aiRouteLock&&lockedAIRouteSafe(p,forecast,cfg),committed=p.aiWaypoint&&Math.hypot(p.aiWaypoint.x+.5-p.x,p.aiWaypoint.y+.5-p.y)>=.075;if(!replanned&&forcedEscape&&!committed&&(!keepLocked||p.aiRouteIndex>=p.aiRoute.length)){replanBombEscape(p,forecast,cfg);replanned=true}if(!replanned&&!forcedEscape&&!committed&&!keepLocked)decideAI(p,cfg,forecast)
  }let move=followAIWaypoint(p),bomb=!!p.aiQueuedBomb,skill=!!p.aiQueuedSkill;p.aiQueuedBomb=false;p.aiQueuedSkill=false;if(bomb)p.aiThink=0;
  // 反向詛咒會在 updatePlayers 再翻一次；AI 先補償，維持實際路徑不變。
  if(p.reverse>0){move.dx=-move.dx;move.dy=-move.dy}return{dx:move.dx,dy:move.dy,bomb,skill};

@@ -146,7 +146,7 @@ internal sealed class PlayerState
     public bool IsGhost { get; set; }
     public int GhostGeneration { get; set; }
     public double GhostTrack { get; set; }
-    public long? ActiveGhostBombId { get; set; }
+    public int ActiveGhostBombs { get; set; }
     public double GhostThinkRemaining { get; set; }
     public int? GhostTargetPlayerId { get; set; }
     public double GhostAimTrack { get; set; }
@@ -206,7 +206,7 @@ internal sealed class PlayerState
         IsGhost = false;
         GhostGeneration = 0;
         GhostTrack = 0;
-        ActiveGhostBombId = null;
+        ActiveGhostBombs = 0;
         GhostThinkRemaining = 0;
         GhostTargetPlayerId = null;
         GhostAimTrack = 0;
@@ -291,7 +291,8 @@ internal sealed class PlayerState
             DashCharges,
             MegaCharges,
             ClusterCharges,
-            IsGhost && ActiveGhostBombId is null,
+            ActiveGhostBombs,
+            IsGhost && ActiveGhostBombs < BombCapacity,
             AiIntent,
             Statistics.ToSnapshot());
 }
@@ -367,6 +368,7 @@ internal sealed class ItemState
     public double Y { get; set; }
     public PowerUpDefinition Definition { get; init; } = null!;
     public double Remaining { get; set; } = 18;
+    public double FlameGrace { get; set; }
     public GridPosition Cell => new((int)Math.Floor(X), (int)Math.Floor(Y));
 
     public ItemSnapshot ToSnapshot() =>

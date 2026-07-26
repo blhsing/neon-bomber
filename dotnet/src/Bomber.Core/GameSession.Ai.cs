@@ -3,6 +3,7 @@ namespace Bomber.Core;
 public sealed partial class GameSession
 {
     private const double AiTargetTolerance = 0.075;
+    private const double AiWaypointApproachGain = 5;
 
     private void UpdateAi(PlayerState player)
     {
@@ -33,8 +34,10 @@ public sealed partial class GameSession
         {
             var escape = FindPath(
                 player,
-                (cell, depth) => depth > 0 &&
-                    (!danger.TryGetValue(cell, out var arrivalDanger) || arrivalDanger > (depth / player.MoveSpeed) + 0.55),
+                // A cell that explodes later is only a waypoint, never an escape goal. Treating
+                // it as "safe enough for now" made the AI alternate between two cells in the
+                // same blast until the fuse expired.
+                (cell, depth) => depth > 0 && !danger.ContainsKey(cell),
                 danger,
                 safetyMargin,
                 26);
@@ -61,7 +64,7 @@ public sealed partial class GameSession
 
         if (CanAiPlantBomb(player) && BombHasPurpose(player))
         {
-            var escape = FindEscapeAfterPlanting(player, danger, safetyMargin);
+            var escape = FindEscapeAfterPlanting(player, safetyMargin);
             if (escape is not null)
             {
                 SetAiRoute(player, escape, "Bombing and escaping");
@@ -91,7 +94,7 @@ public sealed partial class GameSession
         {
             if (crateRoute.Count == 0 && CanAiPlantBomb(player))
             {
-                var escape = FindEscapeAfterPlanting(player, danger, safetyMargin);
+                var escape = FindEscapeAfterPlanting(player, safetyMargin);
                 if (escape is not null)
                 {
                     SetAiRoute(player, escape, "Clearing crates");
@@ -164,7 +167,13 @@ public sealed partial class GameSession
                 return default;
             }
 
-            return (deltaX, deltaY);
+            // The path planner budgets roughly one tile divided by MoveSpeed. Returning the raw
+            // delta made movement ease over the entire tile and take about 2.6 times longer than
+            // forecast. Hold full speed until the last fifth of a tile, then ease into the center
+            // so the physical escape timing matches the route that was approved before planting.
+            return (
+                Math.Clamp(deltaX * AiWaypointApproachGain, -1, 1),
+                Math.Clamp(deltaY * AiWaypointApproachGain, -1, 1));
         }
 
         return default;
@@ -239,37 +248,34 @@ public sealed partial class GameSession
 
     private List<GridPosition>? FindEscapeAfterPlanting(
         PlayerState player,
-        IReadOnlyDictionary<GridPosition, double> existingDanger,
         double safetyMargin)
     {
-        var combinedDanger = new Dictionary<GridPosition, double>(existingDanger);
         var fuse = player.HasRemote ? 8 : _configuration.BombFuseSeconds;
         var range = Math.Min(PlayerCaps.FireRange + 2, player.FireRange + (player.MegaCharges > 0 ? 2 : 0));
-        var projection = ProjectExplosion(
-            player.Cell,
-            range,
-            player.HasPiercingFlames,
-            player.ClusterCharges > 0);
-        var virtualBlast = projection.PrimaryCells.Concat(projection.ClusterCells).ToHashSet();
-        foreach (var cell in virtualBlast)
+        var virtualBomb = new BombState
         {
-            if (!combinedDanger.TryGetValue(cell, out var oldTime) || fuse < oldTime)
-            {
-                combinedDanger[cell] = fuse;
-            }
-        }
+            OwnerPlayerId = player.Id,
+            Cell = player.Cell,
+            Fuse = fuse,
+            InitialFuse = fuse,
+            Range = range,
+            IsPiercing = player.HasPiercingFlames,
+            IsCluster = player.ClusterCharges > 0
+        };
+        var combinedDanger = BuildDangerMap(virtualBomb);
 
         return FindPath(
             player,
-            (cell, depth) => depth > 0 && !virtualBlast.Contains(cell) &&
-                (!combinedDanger.TryGetValue(cell, out var time) || time > (depth / player.MoveSpeed) + 0.60),
+            // The route may traverse a future blast before it detonates, but it must terminate
+            // in a cell outside every currently forecast blast.
+            (cell, depth) => depth > 0 && !combinedDanger.ContainsKey(cell),
             combinedDanger,
             safetyMargin,
             30,
             player.Cell);
     }
 
-    private Dictionary<GridPosition, double> BuildDangerMap()
+    private Dictionary<GridPosition, double> BuildDangerMap(BombState? virtualBomb = null)
     {
         var danger = new Dictionary<GridPosition, double>();
         foreach (var flame in _flames)
@@ -277,12 +283,55 @@ public sealed partial class GameSession
             danger[flame.Cell] = 0;
         }
 
-        foreach (var bomb in _bombs.Where(candidate => !candidate.IsExploded))
+        var bombs = _bombs.Where(candidate => !candidate.IsExploded).ToList();
+        if (virtualBomb is not null)
         {
-            var flightRemaining = bomb.IsAirborne ? bomb.AirborneDuration - bomb.AirborneElapsed : 0;
-            var time = Math.Max(0, bomb.Fuse + flightRemaining);
-            var projection = ProjectExplosion(bomb);
-            foreach (var cell in projection.PrimaryCells.Concat(projection.ClusterCells))
+            bombs.Add(virtualBomb);
+        }
+
+        var flightRemaining = bombs.ToDictionary(
+            bomb => bomb,
+            bomb => bomb.IsAirborne ? Math.Max(0, bomb.AirborneDuration - bomb.AirborneElapsed) : 0);
+        var detonationTimes = bombs.ToDictionary(
+            bomb => bomb,
+            bomb => Math.Max(0, bomb.Fuse + flightRemaining[bomb]));
+        var blastCells = bombs.ToDictionary(
+            bomb => bomb,
+            bomb =>
+            {
+                var projection = ProjectExplosion(bomb);
+                return projection.PrimaryCells.Concat(projection.ClusterCells).ToHashSet();
+            });
+
+        // A long-fuse bomb hit by an earlier explosion detonates in the same simulation tick.
+        // Relax the timings until multi-bomb chain reactions have propagated end to end.
+        var changed = true;
+        while (changed)
+        {
+            changed = false;
+            foreach (var source in bombs)
+            {
+                var sourceTime = detonationTimes[source];
+                foreach (var target in bombs)
+                {
+                    if (ReferenceEquals(source, target) ||
+                        sourceTime < flightRemaining[target] ||
+                        sourceTime >= detonationTimes[target] ||
+                        !blastCells[source].Contains(target.Cell))
+                    {
+                        continue;
+                    }
+
+                    detonationTimes[target] = sourceTime;
+                    changed = true;
+                }
+            }
+        }
+
+        foreach (var bomb in bombs)
+        {
+            var time = detonationTimes[bomb];
+            foreach (var cell in blastCells[bomb])
             {
                 if (!danger.TryGetValue(cell, out var oldTime) || time < oldTime)
                 {
@@ -332,7 +381,8 @@ public sealed partial class GameSession
                     continue;
                 }
 
-                var arrival = nextDepth / Math.Max(0.1, player.MoveSpeed);
+                var planningSpeed = player.MoveSpeed * (player.Slowed > 0 ? 0.58 : 1);
+                var arrival = nextDepth / Math.Max(0.1, planningSpeed);
                 if (danger.TryGetValue(next, out var dangerTime) && dangerTime <= arrival + safetyMargin)
                 {
                     continue;

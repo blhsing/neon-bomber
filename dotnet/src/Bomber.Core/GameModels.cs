@@ -213,12 +213,13 @@ public sealed record PlayerSnapshot(
     int DashCharges,
     int MegaCharges,
     int ClusterCharges,
+    int ActiveGhostBombs,
     bool IsGhostBombReady,
     string AiIntent,
     PlayerStatisticsSnapshot Statistics)
 {
     public GridPosition Cell => new((int)Math.Floor(X), (int)Math.Floor(Y));
-    public int BombsAvailable => Math.Max(0, BombCapacity - ActiveBombs);
+    public int BombsAvailable => Math.Max(0, BombCapacity - (IsGhost ? ActiveGhostBombs : ActiveBombs));
 }
 
 public sealed record BombSnapshot(

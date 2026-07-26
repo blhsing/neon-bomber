@@ -77,4 +77,17 @@ public sealed class ExplosionTests
         Assert.DoesNotContain(new GridPosition(7, 3), flames);
         Assert.Equal(2, session.Players[0].Statistics.CratesDestroyed);
     }
+
+    [Fact]
+    public void ExistingItemIsDestroyedByFlames()
+    {
+        var session = TestSessionFactory.Create();
+        var cell = new GridPosition(5, 5);
+        session.DebugSpawnItem(cell, PowerUpKind.Speed);
+        session.DebugPlaceBomb(0, cell, fuse: 0.01, range: 1);
+
+        session.Tick(0.02);
+
+        Assert.Empty(session.Items);
+    }
 }
