@@ -55,7 +55,8 @@ public enum PowerUpKind
     Cluster,
     Freeze,
     Magnet,
-    Mystery
+    Mystery,
+    BrickDisguise
 }
 
 /// <summary>A zero-based grid cell.</summary>
@@ -208,6 +209,7 @@ public sealed record PlayerSnapshot(
     bool CanPassCrates,
     bool IsFlameproof,
     bool HasMagnet,
+    bool HasBrickDisguise,
     int DashCharges,
     int MegaCharges,
     int ClusterCharges,
@@ -231,6 +233,7 @@ public sealed record BombSnapshot(
     bool IsMega,
     bool IsCluster,
     bool IsPiercing,
+    bool IsBrickDisguised,
     bool IsMoving,
     bool IsGhost,
     bool IsAirborne,

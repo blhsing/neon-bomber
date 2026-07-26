@@ -10,7 +10,7 @@ public sealed record PowerUpDefinition(
     string Description,
     int Weight);
 
-/// <summary>The stable, UI-ready catalog and weighted drop table for all 18 original chips.</summary>
+/// <summary>The stable, UI-ready catalog and weighted drop table for every collectible chip.</summary>
 public static class PowerUpCatalog
 {
     private static readonly ReadOnlyCollection<PowerUpDefinition> Definitions = Array.AsReadOnly(
@@ -22,6 +22,7 @@ public static class PowerUpCatalog
         new("kick", PowerUpKind.Kick, "戰靴", "#50b9ff", "推動並踢飛碰到的爆彈", 7),
         new("glove", PowerUpKind.Glove, "重力拳套", "#d98cff", "技能鍵拋出前方爆彈", 5),
         new("remote", PowerUpKind.Remote, "遙控器", "#ff4ba7", "技能鍵引爆最早的自家爆彈", 5),
+        new("disguise", PowerUpKind.BrickDisguise, "擬態模組", "#c247ff", "本回合爆彈偽裝成能量箱，爆風虛線仍會示警", 4),
         new("pierce", PowerUpKind.Pierce, "電漿針", "#d7fbff", "烈焰可貫穿一個能量箱", 4),
         new("bombpass", PowerUpKind.BombPass, "虛相靴", "#aa91ff", "可以穿過靜止爆彈", 4),
         new("wallpass", PowerUpKind.WallPass, "量子鑽", "#cb7dff", "可以穿過能量箱", 3),

@@ -501,7 +501,8 @@ public sealed partial class GameSession
             Range = Math.Clamp(range, 1, PlayerCaps.FireRange + 2),
             IsMega = isMega,
             IsCluster = isCluster,
-            IsPiercing = isPiercing
+            IsPiercing = isPiercing,
+            IsBrickDisguised = owner.HasBrickDisguise
         };
         foreach (var player in _players.Where(candidate => candidate.IsAlive &&
                      CircleOverlapsCell(candidate.X, candidate.Y, PlayerRadius, cell)))
@@ -950,6 +951,9 @@ public sealed partial class GameSession
                 break;
             case PowerUpKind.Magnet:
                 player.HasMagnet = true;
+                break;
+            case PowerUpKind.BrickDisguise:
+                player.HasBrickDisguise = true;
                 break;
             case PowerUpKind.Mystery:
                 ApplyMysteryPower(player);

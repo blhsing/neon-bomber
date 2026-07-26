@@ -38,6 +38,7 @@ const POWERS={
  kick:{name:'戰靴',color:'#50b9ff',desc:'推動並踢飛碰到的爆彈',weight:7},
  glove:{name:'重力拳套',color:'#d98cff',desc:'技能鍵拋出前方爆彈',weight:5},
  remote:{name:'遙控器',color:'#ff4ba7',desc:'技能鍵引爆最早的自家爆彈',weight:5},
+ disguise:{name:'擬態模組',color:'#c247ff',desc:'本回合爆彈偽裝成能量箱，爆風虛線仍會示警',weight:4},
  pierce:{name:'電漿針',color:'#d7fbff',desc:'烈焰可貫穿一個能量箱',weight:4},
  bombpass:{name:'虛相靴',color:'#aa91ff',desc:'可以穿過靜止爆彈',weight:4},
  wallpass:{name:'量子鑽',color:'#cb7dff',desc:'可以穿過能量箱',weight:3},

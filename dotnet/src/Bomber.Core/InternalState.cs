@@ -173,6 +173,7 @@ internal sealed class PlayerState
     public bool CanPassCrates { get; set; }
     public bool IsFlameproof { get; set; }
     public bool HasMagnet { get; set; }
+    public bool HasBrickDisguise { get; set; }
     public int DashCharges { get; set; }
     public int MegaCharges { get; set; }
     public int ClusterCharges { get; set; }
@@ -231,6 +232,7 @@ internal sealed class PlayerState
         CanPassCrates = false;
         IsFlameproof = false;
         HasMagnet = false;
+        HasBrickDisguise = false;
         DashCharges = 0;
         MegaCharges = 0;
         ClusterCharges = 0;
@@ -285,6 +287,7 @@ internal sealed class PlayerState
             CanPassCrates,
             IsFlameproof,
             HasMagnet,
+            HasBrickDisguise,
             DashCharges,
             MegaCharges,
             ClusterCharges,
@@ -304,6 +307,7 @@ internal sealed class BombState
     public bool IsMega { get; init; }
     public bool IsCluster { get; init; }
     public bool IsPiercing { get; init; }
+    public bool IsBrickDisguised { get; init; }
     public bool IsGhost { get; init; }
     public int SourceGhostGeneration { get; init; }
     public bool IsExploded { get; set; }
@@ -334,6 +338,7 @@ internal sealed class BombState
             IsMega,
             IsCluster,
             IsPiercing,
+            IsBrickDisguised,
             MotionRemaining > 0,
             IsGhost,
             IsAirborne,

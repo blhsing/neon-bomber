@@ -40,7 +40,7 @@ public sealed class ExplosionTests
 
         var item = Assert.Single(session.Items);
         Assert.Equal(new GridPosition(4, 3), item.Cell);
-        Assert.Equal("speed", item.PowerUpId);
+        Assert.Equal("bomb", item.PowerUpId);
         Assert.DoesNotContain(session.Flames, flame => flame.Cell == new GridPosition(5, 3));
     }
 

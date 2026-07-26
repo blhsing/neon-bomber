@@ -12,7 +12,19 @@
             <span class="net-badge">C# · WebAssembly</span>
         </div>
         <div class="top-actions">
-            <button class="ghost-button" @onclick="ShowHelp">玩法與晶片</button>
+            <button class="ghost-button help-button" @onclick="ShowHelp">玩法與晶片</button>
+            @if (_inLobby)
+            {
+                <button type="button"
+                        class="exit-button"
+                        aria-label="離開霓虹爆彈王"
+                        aria-busy="@_isExiting"
+                        disabled="@(_isExiting || !_settingsLoaded)"
+                        @onclick="RequestExitAsync">
+                    <span class="exit-button-icon" aria-hidden="true">⏻</span>
+                    <span>@(_isExiting ? "正在離開…" : "離開遊戲")</span>
+                </button>
+            }
             @if (!_inLobby)
             {
                 <span class="status-pill">第 @_snapshot.RoundNumber 回合</span>
@@ -227,23 +239,33 @@
                             var bombStroke = bomb.IsGhost ? "#ead8ff" : ownerColor;
                             <g @key="@($"bomb:{bomb.Id}")" transform="@BombTransform(bomb)" style="@PlayerStyle(ownerColor)">
                                 <g class="bomb-entity @(bomb.IsGhost ? "ghost-bomb" : null) @(bomb.IsAirborne ? "airborne" : null)">
-                                    @if (bomb.IsAirborne)
+                                    @if (bomb.IsBrickDisguised && !bomb.IsGhost)
                                     {
-                                        <circle class="ghost-flight-aura" r="26" />
-                                        <circle class="ghost-flight-spark spark-one" cx="-25" cy="6" r="3" />
-                                        <circle class="ghost-flight-spark spark-two" cx="-35" cy="-7" r="2" />
+                                        <g class="brick-bomb-disguise" aria-hidden="true">
+                                            <rect class="crate-cell" x="-20" y="-20" width="40" height="40" rx="7" />
+                                            <path class="crate-line" d="M-12 -12 L12 12 M12 -12 L-12 12" />
+                                        </g>
                                     }
-                                    <circle class="bomb-shell" r="15" stroke="@bombStroke" />
-                                    <circle class="fuse-ring" r="19" pathLength="100" stroke="@bombStroke" stroke-dasharray="100" stroke-dashoffset="@BombDashOffset(bomb)" />
-                                    <path d="M7 -12 Q10 -23 17 -18" fill="none" stroke="#d9f7ff" stroke-width="3" stroke-linecap="round" />
-                                    <circle class="bomb-fuse" cx="18" cy="-19" r="4" />
-                                    @if (bomb.IsGhost)
+                                    else
                                     {
-                                        <circle class="ghost-bomb-ring" r="24" />
-                                    }
-                                    @if (bomb.IsMega)
-                                    {
-                                        <circle r="23" fill="none" stroke="#ffd45c" stroke-width="2" stroke-dasharray="3 4" />
+                                        @if (bomb.IsAirborne)
+                                        {
+                                            <circle class="ghost-flight-aura" r="26" />
+                                            <circle class="ghost-flight-spark spark-one" cx="-25" cy="6" r="3" />
+                                            <circle class="ghost-flight-spark spark-two" cx="-35" cy="-7" r="2" />
+                                        }
+                                        <circle class="bomb-shell" r="15" stroke="@bombStroke" />
+                                        <circle class="fuse-ring" r="19" pathLength="100" stroke="@bombStroke" stroke-dasharray="100" stroke-dashoffset="@BombDashOffset(bomb)" />
+                                        <path d="M7 -12 Q10 -23 17 -18" fill="none" stroke="#d9f7ff" stroke-width="3" stroke-linecap="round" />
+                                        <circle class="bomb-fuse" cx="18" cy="-19" r="4" />
+                                        @if (bomb.IsGhost)
+                                        {
+                                            <circle class="ghost-bomb-ring" r="24" />
+                                        }
+                                        @if (bomb.IsMega)
+                                        {
+                                            <circle r="23" fill="none" stroke="#ffd45c" stroke-width="2" stroke-dasharray="3 4" />
+                                        }
                                     }
                                 </g>
                             </g>
@@ -381,6 +403,22 @@
         </main>
     }
 
+    @if (_showExitFallback)
+    {
+        <div class="overlay exit-help-overlay" role="dialog" aria-modal="true" aria-labelledby="exit-help-title" @onclick="HideExitFallback">
+            <div class="dialog exit-help-dialog" @onclick:stopPropagation="true">
+                <div class="exit-help-icon" aria-hidden="true">⏻</div>
+                <span class="eyebrow">Browser safety lock</span>
+                <h2 id="exit-help-title">請按 Alt + F4 離開</h2>
+                <p>瀏覽器不允許這個分頁自行關閉。按下列快捷鍵即可安全結束；你的主選單設定已經保留。</p>
+                <div class="exit-shortcut" aria-label="Alt 加 F4"><kbd>Alt</kbd><span>＋</span><kbd>F4</kbd></div>
+                <div class="dialog-actions">
+                    <button class="ghost-button" @onclick="HideExitFallback">回到主畫面</button>
+                </div>
+            </div>
+        </div>
+    }
+
     @if (_showHelp)
     {
         <div class="overlay help-overlay" role="dialog" aria-modal="true" aria-labelledby="help-title" @onclick="HideHelp">
@@ -442,6 +480,8 @@
     private Task? _loopTask;
     private bool _inLobby = true;
     private bool _showHelp;
+    private bool _showExitFallback;
+    private bool _isExiting;
     private bool _focusArenaAfterRender;
     private bool _settingsLoaded;
     private bool _settingsStorageAvailable = true;
@@ -570,23 +610,9 @@
             return;
         }
 
-        var settings = new PersistedLobbySettings
-        {
-            Version = LobbySettingsSchemaVersion,
-            TargetCrowns = _targetCrowns,
-            CrateDensity = _crateDensity,
-            ItemDropChance = _itemDropChance,
-            Slots = _slots.Select(slot => (PersistedSlotSettings?)new PersistedSlotSettings
-            {
-                Name = slot.Name,
-                Mode = slot.Mode.ToString(),
-                Difficulty = slot.Difficulty.ToString()
-            }).ToList()
-        };
-
         try
         {
-            var json = System.Text.Json.JsonSerializer.Serialize(settings);
+            var json = System.Text.Json.JsonSerializer.Serialize(CaptureLobbySettings());
             await JS.InvokeVoidAsync("localStorage.setItem", LobbySettingsStorageKey, json);
         }
         catch (Microsoft.JSInterop.JSException)
@@ -598,6 +624,20 @@
             _settingsStorageAvailable = false;
         }
     }
+
+    private PersistedLobbySettings CaptureLobbySettings() => new()
+    {
+        Version = LobbySettingsSchemaVersion,
+        TargetCrowns = _targetCrowns,
+        CrateDensity = _crateDensity,
+        ItemDropChance = _itemDropChance,
+        Slots = _slots.Select(slot => (PersistedSlotSettings?)new PersistedSlotSettings
+        {
+            Name = slot.Name,
+            Mode = slot.Mode.ToString(),
+            Difficulty = slot.Difficulty.ToString()
+        }).ToList()
+    };
 
     private void ApplyLobbySettings(PersistedLobbySettings settings)
     {
@@ -762,9 +802,60 @@
         _inLobby = true;
         _heldKeys.Clear();
         _showHelp = false;
+        _showExitFallback = false;
     }
 
-    private void ShowHelp() => _showHelp = true;
+    private async Task RequestExitAsync()
+    {
+        if (_isExiting || !_inLobby || !_settingsLoaded)
+        {
+            return;
+        }
+
+        _isExiting = true;
+        _showHelp = false;
+        _showExitFallback = false;
+
+        try
+        {
+            var settingsJson = System.Text.Json.JsonSerializer.Serialize(CaptureLobbySettings());
+            var windowIsStillOpen = await JS.InvokeAsync<bool>(
+                "neonBomberWindow.tryClose",
+                LobbySettingsStorageKey,
+                settingsJson);
+
+            if (windowIsStillOpen)
+            {
+                _isExiting = false;
+                _showExitFallback = true;
+            }
+        }
+        catch (Microsoft.JSInterop.JSException)
+        {
+            ShowExitFallback();
+        }
+        catch (InvalidOperationException)
+        {
+            ShowExitFallback();
+        }
+        catch (OperationCanceledException)
+        {
+            ShowExitFallback();
+        }
+    }
+
+    private void ShowExitFallback()
+    {
+        _isExiting = false;
+        _showExitFallback = true;
+    }
+
+    private void HideExitFallback() => _showExitFallback = false;
+    private void ShowHelp()
+    {
+        _showExitFallback = false;
+        _showHelp = true;
+    }
     private void HideHelp() => _showHelp = false;
 
     private static string PlayerStyle(string color) => $"--player:{color}";
@@ -937,6 +1028,7 @@
         if (player.CanKick) yield return PowerUpCatalog.Get(PowerUpKind.Kick);
         if (player.HasGlove) yield return PowerUpCatalog.Get(PowerUpKind.Glove);
         if (player.HasRemote) yield return PowerUpCatalog.Get(PowerUpKind.Remote);
+        if (player.HasBrickDisguise) yield return PowerUpCatalog.Get(PowerUpKind.BrickDisguise);
         if (player.HasPiercingFlames) yield return PowerUpCatalog.Get(PowerUpKind.Pierce);
         if (player.CanPassBombs) yield return PowerUpCatalog.Get(PowerUpKind.BombPass);
         if (player.CanPassCrates) yield return PowerUpCatalog.Get(PowerUpKind.WallPass);

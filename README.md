@@ -63,7 +63,7 @@ A wall or bomb stops a player head-on, but a corner no longer catches the traili
 
 ## Item weighting
 
-Bomb-capacity (`bomb`) and fire-range (`fire`) chips both have weight `30`. The next-highest item has weight `10`, so each priority upgrade is three times as likely as any other single item. With the full weight total of `139`, each priority item represents about `21.6%` of item drops (`43.2%` combined). Arena loot settings still control whether a destroyed crate drops an item at all.
+Bomb-capacity (`bomb`) and fire-range (`fire`) chips both have weight `30`. The next-highest item has weight `10`, so each priority upgrade is three times as likely as any other single item. With the full weight total of `143`, each priority item represents about `21.0%` of item drops (`42.0%` combined). Arena loot settings still control whether a destroyed crate drops an item at all.
 
 ## Project map
 
