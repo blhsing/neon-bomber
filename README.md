@@ -61,9 +61,62 @@ When several players overlap the placement tile, every overlapping player may le
 
 A wall or bomb stops a player head-on, but a corner no longer catches the trailing half of the character after their center has cleared it. If a human requests a perpendicular turn a little early, the game briefly buffers that input, carries the current heading to the adjacent lane's centerline, and then spends the remaining movement on the turn. Releasing or changing the input cancels the buffer, so a stale facing direction never moves a stationary player.
 
-## Item weighting
+## Item gallery
 
-Bomb-capacity (`bomb`) and fire-range (`fire`) chips both have weight `30`. The next-highest item has weight `10`, so each priority upgrade is three times as likely as any other single item. With the full weight total of `143`, each priority item represents about `21.0%` of item drops (`42.0%` combined). Arena loot settings still control whether a destroyed crate drops an item at all.
+![Complete gallery of all 19 Neon Bomber items with their names, weights, and weighted drop percentages](docs/item-gallery.svg)
+
+`W` is the item's relative weight inside the item pool, whose total weight is `143`. The percentage shown is conditional on an item actually dropping: arena loot settings first decide whether a destroyed energy crate produces a chip at all. Loose chips can be destroyed by flames.
+
+Bomb-capacity and fire-range chips both have weight `30`. The next-highest item has weight `10`, so each priority upgrade is three times as likely as any other single item. Each represents about `21.0%` of item drops (`42.0%` combined).
+
+## Comprehensive item guide
+
+Unless noted otherwise, an upgrade lasts for the current round and resets when the next round begins. A player who becomes a ghost keeps every relevant upgrade and charge: range, bomb capacity, movement speed, remote control, piercing, disguise, dash, mega, cluster, and similar effects continue to influence ghost movement or ghost bombs. A successful ghost revival also retains those round-scoped upgrades.
+
+### Core and equipment upgrades
+
+| Item | Drop share | Effect and limits |
+| --- | ---: | --- |
+| **爆彈袋 / Bomb Bag** (`bomb`) | W30 · 21.0% | Adds `1` concurrent bomb, up to `9`. The same capacity controls how many ghost bombs may be active at once. |
+| **烈焰核心 / Flame Core** (`fire`) | W30 · 21.0% | Adds `1` tile of flame range, up to `10`. It also extends ghost bombs; a charged Supernova can temporarily reach two tiles beyond the normal cap. |
+| **疾風輪 / Gale Wheel** (`speed`) | W10 · 7.0% | Adds `0.34` movement speed, from a base of `3.15` up to `5.20`. Ghost rail speed scales with the collected speed upgrades. |
+| **戰靴 / Battle Boots** (`kick`) | W7 · 4.9% | Passive equipment. Moving into a bomb pushes or kicks it forward when the next tile is open. Unlike the Gravity Glove, no action-key press is needed. |
+| **重力拳套 / Gravity Glove** (`glove`) | W5 · 3.5% | Action-key equipment. Throws the adjacent bomb in the facing direction across several open cells. It works on bombs regardless of owner. |
+| **遙控器 / Remote Control** (`remote`) | W5 · 3.5% | Newly placed regular and ghost bombs receive a long `8`-second safety fuse. The action key detonates the oldest grounded bomb you own; remote detonation takes priority over glove or dash actions when a valid bomb exists. |
+| **擬態模組 / Mimic Module** (`disguise`) | W4 · 2.8% | Bombs placed after pickup look like energy crates for the rest of the round. Their collision, fuse, chain reactions, and damage remain normal, and the flame-range preview stays visible for fairness. |
+| **電漿針 / Plasma Needle** (`pierce`) | W4 · 2.8% | Each flame ray may pass through one energy crate and continue beyond it. A second crate on the same ray still stops the flame. |
+| **虛相靴 / Phase Boots** (`bombpass`) | W4 · 2.8% | Allows movement through stationary bombs. It does not grant immunity to their flames. |
+| **量子鑽 / Quantum Drill** (`wallpass`) | W3 · 2.1% | Allows movement through destructible energy crates, but never through the arena's solid walls. |
+| **鳳凰甲 / Phoenix Armor** (`flamepass`) | W2 · 1.4% | Permanently protects you from flames created by your own bombs for the rest of the round. Enemy flames still cause normal damage, so the armor cannot erase every hazard. |
+| **磁力場 / Magnetic Field** (`magnet`) | W4 · 2.8% | Smoothly attracts loose chips from roughly `2.5` tiles away. Nearby magnet owners may compete for the same chip; attracted items remain vulnerable to flames until collected. |
+
+### Protection and charged powers
+
+| Item | Drop share | Effect and limits |
+| --- | ---: | --- |
+| **光子護盾 / Photon Shield** (`shield`) | W8 · 5.6% | Adds one shield charge, up to `3`. A charge absorbs the next flame hit and grants a short recovery window. |
+| **生命晶核 / Life Core** (`heart`) | W5 · 3.5% | Restores or adds one current life, up to `3`. Damage consumes life after shields; a ghost revival returns with one life. |
+| **脈衝引擎 / Pulse Engine** (`dash`) | W5 · 3.5% | Adds `2` dash charges, up to `5`. The action key consumes one charge for a brief high-speed burst; ghosts can spend retained charges to race around the outer rail. |
+| **超新星 / Supernova** (`mega`) | W4 · 2.8% | Adds one charge, up to `3`. The next regular or ghost bomb consumes one charge, becomes visually larger, gains `2` flame-range tiles, and produces a stronger, longer blast presentation. |
+| **蜂群核心 / Swarm Core** (`cluster`) | W4 · 2.8% | Adds one charge, up to `3`. The next regular or ghost bomb consumes one charge and scatters short diagonal flames from selected blast endpoints. |
+
+### Immediate and unpredictable items
+
+| Item | Drop share | Effect and limits |
+| --- | ---: | --- |
+| **零度脈衝 / Zero Pulse** (`freeze`) | W3 · 2.1% | Triggers immediately and freezes every living opponent for `2.2` seconds. It does not freeze the collector or ghosts already outside the arena. |
+| **混沌禮盒 / Chaos Gift** (`mystery`) | W6 · 4.2% | Resolves immediately into one of six outcomes listed below. It can be a major upgrade, a repositioning tool, or a six-second curse. |
+
+#### Chaos Gift outcomes
+
+| Chance | Outcome |
+| ---: | --- |
+| 20% | **Direction reversal** — reverses movement controls for `6` seconds. |
+| 18% | **Slime slowdown** — reduces movement speed for `6` seconds. |
+| 17% | **Quantum teleport** — moves the collector to a random open, bomb-free floor cell and grants about `1` second of protection. |
+| 17% | **Double shield** — adds `2` shield charges. |
+| 16% | **Destruction package** — adds `2` Supernova charges and `1` Swarm Core charge. |
+| 12% | **Full overload** — adds `2` bomb capacity, `2` flame range, and `0.50` movement speed, subject to the normal stat caps. |
 
 ## Project map
 
@@ -80,6 +133,9 @@ dotnet/
   src/Bomber.Web/      Blazor WebAssembly UI and SVG arena renderer
   tests/               engine tests
   tools/               reproducible icon asset builder
+
+docs/
+  item-gallery.svg     README gallery rendered from the canonical .NET item icons
 ```
 
 The neon bomb application icon is shared by both editions. The HTML edition's bundled Kenney media is attributed in its in-game help panel.

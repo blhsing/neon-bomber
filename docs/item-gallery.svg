@@ -1,0 +1,248 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Neon Bomber complete item gallery</title>
+  <desc id="desc">All nineteen Neon Bomber power-up icons with Chinese and English names, drop weights, and weighted drop percentages.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111b3c"/>
+      <stop offset=".48" stop-color="#070c21"/>
+      <stop offset="1" stop-color="#030611"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#16244b" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#090d24" stop-opacity=".98"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#5be8ff" stroke-opacity=".045"/>
+    </pattern>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+    <style>
+      .title{font:800 34px "Segoe UI","Microsoft JhengHei",sans-serif;fill:#eaffff;letter-spacing:1px}
+      .subtitle{font:500 15px "Segoe UI","Microsoft JhengHei",sans-serif;fill:#8fb6c9;letter-spacing:.7px}
+      .name{font:800 18px "Segoe UI","Microsoft JhengHei",sans-serif;fill:#f3ffff}
+      .meta{font:600 12px "Segoe UI","Microsoft JhengHei",sans-serif;fill:#9db7c8}
+      .foot{font:500 12px "Segoe UI","Microsoft JhengHei",sans-serif;fill:#6f91a8}
+    </style>
+  </defs>
+  <rect width="1200" height="800" rx="26" fill="url(#bg)"/>
+  <rect width="1200" height="800" rx="26" fill="url(#grid)"/>
+  <circle cx="130" cy="48" r="110" fill="#41eaff" fill-opacity=".08" filter="url(#glow)"/>
+  <circle cx="1060" cy="82" r="130" fill="#d84dff" fill-opacity=".08" filter="url(#glow)"/>
+  <text x="32" y="48" class="title">NEON BOMBER · COMPLETE ITEM GALLERY</text>
+  <text x="34" y="78" class="subtitle">霓虹爆彈王 · 19 power-ups · W = relative drop weight · percentages use total weight 143</text>
+  <path d="M32 98 H1168" stroke="#54e9ff" stroke-opacity=".26"/>
+  <g>
+    <rect x="32" y="124" width="212" height="144" rx="18" fill="url(#card)" stroke="#ffdb54" stroke-opacity=".55"/>
+    <rect x="33" y="125" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="138" cy="177" r="42" fill="#ffdb54" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="102" y="141" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="爆彈袋" focusable="false"><title>爆彈袋</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="1" cy="3" r="9" fill="#f4ffff"></circle>
+                <path d="M 5 -5 Q 7 -12 12 -10" fill="none"></path>
+                <circle cx="12" cy="-10" r="2.4" fill="#ffdb54" stroke="#f4ffff"></circle>
+                <circle cx="-8" cy="-7" r="4" fill="#ffdb54"></circle>
+                <path d="M -10 -7 H -6 M -8 -9 V -5" fill="none" stroke="#f4ffff" stroke-width="1.8"></path></g></svg>
+    <text x="138" y="231" text-anchor="middle" class="name">爆彈袋</text>
+    <text x="138" y="251" text-anchor="middle" class="meta">Bomb Bag · W30 · 21.0%</text>
+  </g>
+  <g>
+    <rect x="260" y="124" width="212" height="144" rx="18" fill="url(#card)" stroke="#ff653d" stroke-opacity=".55"/>
+    <rect x="261" y="125" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="366" cy="177" r="42" fill="#ff653d" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="330" y="141" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="烈焰核心" focusable="false"><title>烈焰核心</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 14 C -11 11 -12 2 -5 -5 C -2 -8 -3 -12 1 -15 C 2 -8 9 -7 10 1 C 13 9 7 14 0 14 Z" fill="#f4ffff"></path>
+                <path d="M 1 11 C -4 9 -4 4 0 -1 C 1 4 6 5 5 9 C 4 11 2 12 1 11 Z" fill="#ff653d" stroke="none"></path></g></svg>
+    <text x="366" y="231" text-anchor="middle" class="name">烈焰核心</text>
+    <text x="366" y="251" text-anchor="middle" class="meta">Flame Core · W30 · 21.0%</text>
+  </g>
+  <g>
+    <rect x="488" y="124" width="212" height="144" rx="18" fill="url(#card)" stroke="#5dffb0" stroke-opacity=".55"/>
+    <rect x="489" y="125" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="594" cy="177" r="42" fill="#5dffb0" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="558" y="141" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="疾風輪" focusable="false"><title>疾風輪</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M -12 5 L -5 4 L -1 -6 H 7 L 5 0 L 12 4 L 9 9 H -5 Z" fill="#f4ffff"></path>
+                <path d="M -13 -5 H -4 M -15 0 H -6" fill="none" stroke="#bce8f0" stroke-width="2.5"></path>
+                <path d="M -14 11 H 8" fill="none" stroke="#5dffb0" stroke-width="2.5"></path>
+                <path d="M 2 -14 H 10 L 5 -8 H 10 L -1 1 L 2 -6 H -3 Z" fill="#5dffb0"></path></g></svg>
+    <text x="594" y="231" text-anchor="middle" class="name">疾風輪</text>
+    <text x="594" y="251" text-anchor="middle" class="meta">Gale Wheel · W10 · 7.0%</text>
+  </g>
+  <g>
+    <rect x="716" y="124" width="212" height="144" rx="18" fill="url(#card)" stroke="#50b9ff" stroke-opacity=".55"/>
+    <rect x="717" y="125" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="822" cy="177" r="42" fill="#50b9ff" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="786" y="141" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="戰靴" focusable="false"><title>戰靴</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M -11 -11 H -2 L 0 -1 L 10 3 L 12 9 L 7 12 L -8 10 L -12 5 Z" fill="#f4ffff"></path>
+                <path d="M -8 7 L 8 9" fill="none" stroke="#50b9ff" stroke-width="3"></path>
+                <path d="M 12 -5 L 15 -8 M 13 0 H 16 M 12 5 L 15 8" fill="none" stroke="#f4ffff"></path></g></svg>
+    <text x="822" y="231" text-anchor="middle" class="name">戰靴</text>
+    <text x="822" y="251" text-anchor="middle" class="meta">Battle Boots · W7 · 4.9%</text>
+  </g>
+  <g>
+    <rect x="944" y="124" width="212" height="144" rx="18" fill="url(#card)" stroke="#d98cff" stroke-opacity=".55"/>
+    <rect x="945" y="125" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="1050" cy="177" r="42" fill="#d98cff" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="1014" y="141" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="重力拳套" focusable="false"><title>重力拳套</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="-7" cy="-5" r="5" fill="#f4ffff"></circle>
+                <circle cx="0" cy="-8" r="5" fill="#f4ffff"></circle>
+                <circle cx="7" cy="-5" r="5" fill="#f4ffff"></circle>
+                <path d="M -11 -3 L -9 7 Q -6 13 1 12 L 8 8 Q 12 3 8 -1 L 3 3 L -2 0 Z" fill="#f4ffff"></path>
+                <path d="M -6 9 L 6 8 L 7 14 L -5 14 Z" fill="#d98cff"></path></g></svg>
+    <text x="1050" y="231" text-anchor="middle" class="name">重力拳套</text>
+    <text x="1050" y="251" text-anchor="middle" class="meta">Gravity Glove · W5 · 3.5%</text>
+  </g>
+  <g>
+    <rect x="32" y="284" width="212" height="144" rx="18" fill="url(#card)" stroke="#ff4ba7" stroke-opacity=".55"/>
+    <rect x="33" y="285" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="138" cy="337" r="42" fill="#ff4ba7" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="102" y="301" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="遙控器" focusable="false"><title>遙控器</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="-9" y="-10" width="18" height="23" rx="4" fill="#f4ffff"></rect>
+                <path d="M 3 -10 L 9 -15" fill="none"></path>
+                <circle cx="9" cy="-15" r="1.8" fill="#ff4ba7"></circle>
+                <circle cx="-4" cy="-4" r="2.5" fill="#ff4ba7"></circle>
+                <circle cx="4" cy="3" r="2.5" fill="#06101d" stroke="none"></circle>
+                <path d="M -5 7 H 5" fill="none"></path>
+                <path d="M 11 -12 A 5 5 0 0 1 15 -6" fill="none" stroke="#f4ffff"></path></g></svg>
+    <text x="138" y="391" text-anchor="middle" class="name">遙控器</text>
+    <text x="138" y="411" text-anchor="middle" class="meta">Remote Control · W5 · 3.5%</text>
+  </g>
+  <g>
+    <rect x="260" y="284" width="212" height="144" rx="18" fill="url(#card)" stroke="#c247ff" stroke-opacity=".55"/>
+    <rect x="261" y="285" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="366" cy="337" r="42" fill="#c247ff" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="330" y="301" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="擬態模組" focusable="false"><title>擬態模組</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="-12" y="-11" width="24" height="23" rx="4" fill="#c247ff"></rect>
+                <path d="M -8 -7 L 8 7 M 8 -7 L -8 7" fill="none" stroke="#f4ffff" stroke-width="2.4"></path>
+                <path d="M 4 -11 Q 7 -16 12 -13" fill="none" stroke="#f4ffff"></path>
+                <circle cx="12" cy="-13" r="2.2" fill="#c247ff" stroke="#f4ffff"></circle>
+                <path d="M -12 0 H 12" fill="none" stroke="#06101d" stroke-opacity=".42"></path></g></svg>
+    <text x="366" y="391" text-anchor="middle" class="name">擬態模組</text>
+    <text x="366" y="411" text-anchor="middle" class="meta">Mimic Module · W4 · 2.8%</text>
+  </g>
+  <g>
+    <rect x="488" y="284" width="212" height="144" rx="18" fill="url(#card)" stroke="#d7fbff" stroke-opacity=".55"/>
+    <rect x="489" y="285" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="594" cy="337" r="42" fill="#d7fbff" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="558" y="301" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="電漿針" focusable="false"><title>電漿針</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M -14 -9 H -6 V -2 H -14 Z M -14 3 H -6 V 10 H -14 Z M 14 -9 H 6 V -2 H 14 Z M 14 3 H 6 V 10 H 14 Z" fill="#bce8f0"></path>
+                <path d="M -13 0 H 9" fill="none" stroke="#f4ffff" stroke-width="3"></path>
+                <path d="M 8 -5 L 15 0 L 8 5 Z" fill="#d7fbff"></path></g></svg>
+    <text x="594" y="391" text-anchor="middle" class="name">電漿針</text>
+    <text x="594" y="411" text-anchor="middle" class="meta">Plasma Needle · W4 · 2.8%</text>
+  </g>
+  <g>
+    <rect x="716" y="284" width="212" height="144" rx="18" fill="url(#card)" stroke="#aa91ff" stroke-opacity=".55"/>
+    <rect x="717" y="285" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="822" cy="337" r="42" fill="#aa91ff" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="786" y="301" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="虛相靴" focusable="false"><title>虛相靴</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="-7" cy="6" r="6" fill="#bce8f0"></circle>
+                <path d="M -2 -11 Q 7 -14 10 -5 V 10 L 6 7 L 2 10 L -2 7 L -6 10 V -5 Q -5 -9 -2 -11 Z" fill="#f4ffff"></path>
+                <circle cx="-1" cy="-4" r="1.5" fill="#06101d" stroke="none"></circle>
+                <circle cx="5" cy="-4" r="1.5" fill="#06101d" stroke="none"></circle>
+                <path d="M -13 13 L 13 -13" fill="none" stroke="#aa91ff" stroke-width="2.5"></path></g></svg>
+    <text x="822" y="391" text-anchor="middle" class="name">虛相靴</text>
+    <text x="822" y="411" text-anchor="middle" class="meta">Phase Boots · W4 · 2.8%</text>
+  </g>
+  <g>
+    <rect x="944" y="284" width="212" height="144" rx="18" fill="url(#card)" stroke="#cb7dff" stroke-opacity=".55"/>
+    <rect x="945" y="285" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="1050" cy="337" r="42" fill="#cb7dff" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="1014" y="301" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="量子鑽" focusable="false"><title>量子鑽</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M -12 -14 H -5 V -7 H -12 Z M 7 -14 H 14 V -7 H 7 Z M -12 -4 H -5 V 3 H -12 Z M 7 -4 H 14 V 3 H 7 Z M -12 6 H -5 V 13 H -12 Z M 7 6 H 14 V 13 H 7 Z" fill="#bce8f0"></path>
+                <path d="M -4 -10 Q 2 -14 6 -8 V 9 L 2 6 L -2 9 L -5 6 V -7 Q -5 -9 -4 -10 Z" fill="#f4ffff"></path>
+                <circle cx="-1" cy="-4" r="1.2" fill="#06101d" stroke="none"></circle>
+                <circle cx="3" cy="-4" r="1.2" fill="#06101d" stroke="none"></circle>
+                <path d="M -14 15 L 14 -15" fill="none" stroke="#cb7dff" stroke-width="2.5"></path></g></svg>
+    <text x="1050" y="391" text-anchor="middle" class="name">量子鑽</text>
+    <text x="1050" y="411" text-anchor="middle" class="meta">Quantum Drill · W3 · 2.1%</text>
+  </g>
+  <g>
+    <rect x="32" y="444" width="212" height="144" rx="18" fill="url(#card)" stroke="#ffac4d" stroke-opacity=".55"/>
+    <rect x="33" y="445" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="138" cy="497" r="42" fill="#ffac4d" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="102" y="461" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="鳳凰甲" focusable="false"><title>鳳凰甲</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 -15 L 12 -10 L 10 3 L 6 10 L 0 14 L -6 10 L -10 3 L -12 -10 Z" fill="#f4ffff"></path>
+                <path d="M 0 9 C -6 7 -6 1 -2 -3 Q 0 -6 1 -10 Q 8 -3 5 5 Q 4 9 0 9 Z" fill="#ffac4d"></path></g></svg>
+    <text x="138" y="551" text-anchor="middle" class="name">鳳凰甲</text>
+    <text x="138" y="571" text-anchor="middle" class="meta">Phoenix Armor · W2 · 1.4%</text>
+  </g>
+  <g>
+    <rect x="260" y="444" width="212" height="144" rx="18" fill="url(#card)" stroke="#62dfff" stroke-opacity=".55"/>
+    <rect x="261" y="445" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="366" cy="497" r="42" fill="#62dfff" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="330" y="461" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="光子護盾" focusable="false"><title>光子護盾</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 -15 L 12 -10 L 10 4 L 5 11 L 0 15 L -5 11 L -10 4 L -12 -10 Z" fill="#f4ffff"></path>
+                <path d="M 0 -9 L 6 -6 L 5 3 L 0 9 L -5 3 L -6 -6 Z" fill="#62dfff" stroke="none"></path>
+                <path d="M -5 -13 L -9 -9 M -8 -13 L -5 -10" fill="none" stroke="#f4ffff"></path></g></svg>
+    <text x="366" y="551" text-anchor="middle" class="name">光子護盾</text>
+    <text x="366" y="571" text-anchor="middle" class="meta">Photon Shield · W8 · 5.6%</text>
+  </g>
+  <g>
+    <rect x="488" y="444" width="212" height="144" rx="18" fill="url(#card)" stroke="#ff6585" stroke-opacity=".55"/>
+    <rect x="489" y="445" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="594" cy="497" r="42" fill="#ff6585" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="558" y="461" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="生命晶核" focusable="false"><title>生命晶核</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 14 C -3 10 -13 4 -13 -4 C -13 -13 -3 -15 0 -8 C 4 -15 13 -13 13 -4 C 13 4 3 11 0 14 Z" fill="#f4ffff"></path>
+                <path d="M -8 1 H -4 L -1 -4 L 3 6 L 6 1 H 10" fill="none" stroke="#ff6585" stroke-width="2.5"></path></g></svg>
+    <text x="594" y="551" text-anchor="middle" class="name">生命晶核</text>
+    <text x="594" y="571" text-anchor="middle" class="meta">Life Core · W5 · 3.5%</text>
+  </g>
+  <g>
+    <rect x="716" y="444" width="212" height="144" rx="18" fill="url(#card)" stroke="#7dfffb" stroke-opacity=".55"/>
+    <rect x="717" y="445" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="822" cy="497" r="42" fill="#7dfffb" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="786" y="461" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="脈衝引擎" focusable="false"><title>脈衝引擎</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M 1 -15 H 12 L 5 -5 H 12 L -3 15 L 0 2 H -8 Z" fill="#7dfffb"></path>
+                <path d="M -14 -8 H -5 M -16 0 H -7 M -14 8 H -5" fill="none" stroke="#f4ffff" stroke-width="2.5"></path></g></svg>
+    <text x="822" y="551" text-anchor="middle" class="name">脈衝引擎</text>
+    <text x="822" y="571" text-anchor="middle" class="meta">Pulse Engine · W5 · 3.5%</text>
+  </g>
+  <g>
+    <rect x="944" y="444" width="212" height="144" rx="18" fill="url(#card)" stroke="#ffcf55" stroke-opacity=".55"/>
+    <rect x="945" y="445" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="1050" cy="497" r="42" fill="#ffcf55" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="1014" y="461" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="超新星" focusable="false"><title>超新星</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="0" cy="2" r="8" fill="#f4ffff"></circle>
+                <path d="M 4 -5 Q 7 -11 11 -9" fill="none"></path>
+                <g fill="none" stroke-width="2"><path d="M 11 2 H 15 M -11 2 H -15 M 0 -9 V -13 M 0 13 V 17" stroke="#ffcf55"></path>
+                    <path d="M 8 -6 L 11 -9 M -8 -6 L -11 -9 M 8 10 L 11 13 M -8 10 L -11 13" stroke="#f4ffff"></path></g>
+                <circle cx="11" cy="-9" r="2" fill="#ffcf55" stroke="#f4ffff"></circle></g></svg>
+    <text x="1050" y="551" text-anchor="middle" class="name">超新星</text>
+    <text x="1050" y="571" text-anchor="middle" class="meta">Supernova · W4 · 2.8%</text>
+  </g>
+  <g>
+    <rect x="114" y="604" width="212" height="144" rx="18" fill="url(#card)" stroke="#8aff63" stroke-opacity=".55"/>
+    <rect x="115" y="605" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="220" cy="657" r="42" fill="#8aff63" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="184" y="621" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="蜂群核心" focusable="false"><title>蜂群核心</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 0 L -9 -8 M 0 0 L 9 -8 M 0 0 L -9 9 M 0 0 L 9 9" fill="none" stroke="#bce8f0"></path>
+                <circle cx="-9" cy="-8" r="4" fill="#8aff63"></circle>
+                <circle cx="9" cy="-8" r="4" fill="#8aff63"></circle>
+                <circle cx="-9" cy="9" r="4" fill="#8aff63"></circle>
+                <circle cx="9" cy="9" r="4" fill="#8aff63"></circle>
+                <circle cx="0" cy="0" r="6" fill="#f4ffff"></circle>
+                <circle cx="0" cy="0" r="2" fill="#8aff63" stroke="none"></circle></g></svg>
+    <text x="220" y="711" text-anchor="middle" class="name">蜂群核心</text>
+    <text x="220" y="731" text-anchor="middle" class="meta">Swarm Core · W4 · 2.8%</text>
+  </g>
+  <g>
+    <rect x="342" y="604" width="212" height="144" rx="18" fill="url(#card)" stroke="#80d5ff" stroke-opacity=".55"/>
+    <rect x="343" y="605" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="448" cy="657" r="42" fill="#80d5ff" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="412" y="621" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="零度脈衝" focusable="false"><title>零度脈衝</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><g fill="none"><path d="M -14 0 H 14 M 9 0 L 5 -4 M 9 0 L 5 4 M -9 0 L -5 -4 M -9 0 L -5 4" stroke="#f4ffff" stroke-width="2.4"></path>
+                    <path d="M -14 0 H 14 M 9 0 L 5 -4 M 9 0 L 5 4 M -9 0 L -5 -4 M -9 0 L -5 4" stroke="#80d5ff" transform="rotate(60)"></path>
+                    <path d="M -14 0 H 14 M 9 0 L 5 -4 M 9 0 L 5 4 M -9 0 L -5 -4 M -9 0 L -5 4" stroke="#f4ffff" transform="rotate(120)"></path></g>
+                <circle cx="0" cy="0" r="2.5" fill="#f4ffff"></circle></g></svg>
+    <text x="448" y="711" text-anchor="middle" class="name">零度脈衝</text>
+    <text x="448" y="731" text-anchor="middle" class="meta">Zero Pulse · W3 · 2.1%</text>
+  </g>
+  <g>
+    <rect x="570" y="604" width="212" height="144" rx="18" fill="url(#card)" stroke="#ff79e2" stroke-opacity=".55"/>
+    <rect x="571" y="605" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="676" cy="657" r="42" fill="#ff79e2" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="640" y="621" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="磁力場" focusable="false"><title>磁力場</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M 11 -1 A 11 11 0 0 1 -11 -1 L -4 -1 A 4 4 0 0 0 4 -1 Z" fill="#f4ffff"></path>
+                <path d="M -11 -2 H -4 V 9 H -11 Z M 4 -2 H 11 V 9 H 4 Z" fill="#ff79e2"></path>
+                <path d="M -10 12 H -4 M 4 12 H 10" fill="none" stroke="#f4ffff"></path></g></svg>
+    <text x="676" y="711" text-anchor="middle" class="name">磁力場</text>
+    <text x="676" y="731" text-anchor="middle" class="meta">Magnetic Field · W4 · 2.8%</text>
+  </g>
+  <g>
+    <rect x="798" y="604" width="212" height="144" rx="18" fill="url(#card)" stroke="#f8f8ff" stroke-opacity=".55"/>
+    <rect x="799" y="605" width="210" height="142" rx="17" fill="none" stroke="#ffffff" stroke-opacity=".06"/>
+    <circle cx="904" cy="657" r="42" fill="#f8f8ff" fill-opacity=".12" filter="url(#glow)"/>
+    <svg class="power-up-icon" x="868" y="621" width="72" height="72" viewBox="-16 -16 32 32" preserveAspectRatio="xMidYMid meet" role="img" aria-label="混沌禮盒" focusable="false"><title>混沌禮盒</title><g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="-12" y="-7" width="24" height="19" rx="3" fill="#f4ffff"></rect>
+                <path d="M -14 -11 H 14 V -4 H -14 Z" fill="#f8f8ff"></path>
+                <path d="M -2 -11 H 2 V 12 H -2 Z" fill="#bce8f0"></path>
+                <ellipse cx="-5" cy="-14" rx="6" ry="3" transform="rotate(-26 -5 -14)" fill="#f4ffff"></ellipse>
+                <ellipse cx="5" cy="-14" rx="6" ry="3" transform="rotate(26 5 -14)" fill="#f4ffff"></ellipse>
+                <path d="M 12 -15 H 15 M 13.5 -17 V -13" fill="none" stroke="#f8f8ff"></path></g></svg>
+    <text x="904" y="711" text-anchor="middle" class="name">混沌禮盒</text>
+    <text x="904" y="731" text-anchor="middle" class="meta">Chaos Gift · W6 · 4.2%</text>
+  </g>
+  <text x="600" y="782" text-anchor="middle" class="foot">Artwork rendered from the canonical Bomber.Web PowerUpIcon component</text>
+</svg>
+
