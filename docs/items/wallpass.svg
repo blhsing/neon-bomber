@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-labelledby="title">
+  <title id="title">量子鑽</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#16244b"/>
+      <stop offset="1" stop-color="#070b1c"/>
+    </linearGradient>
+    <radialGradient id="halo">
+      <stop offset="0" stop-color="#cb7dff" stop-opacity=".30"/>
+      <stop offset="1" stop-color="#cb7dff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect x="1" y="1" width="94" height="94" rx="20" fill="url(#bg)" stroke="#cb7dff" stroke-opacity=".62" stroke-width="2"/>
+  <circle cx="48" cy="48" r="38" fill="url(#halo)"/>
+  <g transform="translate(48 48) scale(1.72)">
+    <g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M -12 -14 H -5 V -7 H -12 Z M 7 -14 H 14 V -7 H 7 Z M -12 -4 H -5 V 3 H -12 Z M 7 -4 H 14 V 3 H 7 Z M -12 6 H -5 V 13 H -12 Z M 7 6 H 14 V 13 H 7 Z" fill="#bce8f0"></path>
+                <path d="M -4 -10 Q 2 -14 6 -8 V 9 L 2 6 L -2 9 L -5 6 V -7 Q -5 -9 -4 -10 Z" fill="#f4ffff"></path>
+                <circle cx="-1" cy="-4" r="1.2" fill="#06101d" stroke="none"></circle>
+                <circle cx="3" cy="-4" r="1.2" fill="#06101d" stroke="none"></circle>
+                <path d="M -14 15 L 14 -15" fill="none" stroke="#cb7dff" stroke-width="2.5"></path></g>
+  </g>
+</svg>

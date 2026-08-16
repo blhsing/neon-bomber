@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-labelledby="title">
+  <title id="title">超新星</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#16244b"/>
+      <stop offset="1" stop-color="#070b1c"/>
+    </linearGradient>
+    <radialGradient id="halo">
+      <stop offset="0" stop-color="#ffcf55" stop-opacity=".30"/>
+      <stop offset="1" stop-color="#ffcf55" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect x="1" y="1" width="94" height="94" rx="20" fill="url(#bg)" stroke="#ffcf55" stroke-opacity=".62" stroke-width="2"/>
+  <circle cx="48" cy="48" r="38" fill="url(#halo)"/>
+  <g transform="translate(48 48) scale(1.72)">
+    <g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="0" cy="2" r="8" fill="#f4ffff"></circle>
+                <path d="M 4 -5 Q 7 -11 11 -9" fill="none"></path>
+                <g fill="none" stroke-width="2"><path d="M 11 2 H 15 M -11 2 H -15 M 0 -9 V -13 M 0 13 V 17" stroke="#ffcf55"></path>
+                    <path d="M 8 -6 L 11 -9 M -8 -6 L -11 -9 M 8 10 L 11 13 M -8 10 L -11 13" stroke="#f4ffff"></path></g>
+                <circle cx="11" cy="-9" r="2" fill="#ffcf55" stroke="#f4ffff"></circle></g>
+  </g>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-labelledby="title">
+  <title id="title">脈衝引擎</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#16244b"/>
+      <stop offset="1" stop-color="#070b1c"/>
+    </linearGradient>
+    <radialGradient id="halo">
+      <stop offset="0" stop-color="#7dfffb" stop-opacity=".30"/>
+      <stop offset="1" stop-color="#7dfffb" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect x="1" y="1" width="94" height="94" rx="20" fill="url(#bg)" stroke="#7dfffb" stroke-opacity=".62" stroke-width="2"/>
+  <circle cx="48" cy="48" r="38" fill="url(#halo)"/>
+  <g transform="translate(48 48) scale(1.72)">
+    <g stroke="#06101d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M 1 -15 H 12 L 5 -5 H 12 L -3 15 L 0 2 H -8 Z" fill="#7dfffb"></path>
+                <path d="M -14 -8 H -5 M -16 0 H -7 M -14 8 H -5" fill="none" stroke="#f4ffff" stroke-width="2.5"></path></g>
+  </g>
+</svg>
